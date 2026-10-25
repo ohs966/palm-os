@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Collections | Palm Trade</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+<div class="wrap">
+  <div class="page">
+    <div class="top">
+      <a class="brand" href="index.html"><span class="mark">P</span>Palm Trade</a>
+      <nav class="nav">
+        <a href="index.html" data-t="nav_home">Home</a>
+        <a class="on" href="collections.html" data-t="nav_collections">Collections</a>
+        <a href="index.html#about" data-t="nav_about">About</a>
+        <a href="index.html#contact" data-t="nav_contact">Contact</a>
+      </nav>
+      <div class="icons">
+        <label class="search" style="width:220px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg><input id="q" data-t-ph="search" placeholder="Search products" /></label>
+        <button class="ibtn" data-lang-toggle><span data-t="lang" style="font-size:11px;font-weight:600">العربية</span></button>
+        <a class="cta" href="https://ohs966.github.io/palm-os/#/intake" style="padding:6px 6px 6px 18px"><span data-t="cta">Request a quotation</span><span class="arr" style="width:30px;height:30px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M8 7h9v9"/></svg></span></a>
+      </div>
+    </div>
+    <div class="crumbs"><a href="index.html" data-t="nav_home">Home</a> / <span data-t="nav_collections">Collections</span></div>
+    <h1 style="font-size:40px;letter-spacing:-.03em;margin:0 0 6px" data-t="col_t">Collections</h1>
+    <p class="sub" data-t="col_s">Products are grouped by sector and category. Open any product to see its details and request a quotation.</p>
+    <div id="list"><div class="empty" data-t="loading">Loading...</div></div>
+  </div>
+  <footer><span data-t="footer">Palm Trade. General supply company, Egypt.</span></footer>
+</div>
+<script src="site.js"></script>
+<script>
+const SECTOR_ANCHORS = { uniforms: "uniforms", housekeeping_buffet: "housekeeping", hospitality: "hospitality", fnb_meals: "fnb", kitchen_equipment: "fnb", security: "security", construction: "construction", logistics: "logistics" };
+let rows = [];
+function esc(s) { return String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c])); }
+function render() {
+  const q = (document.getElementById("q").value || "").trim().toLowerCase();
+  const list = document.getElementById("list");
+  const data = rows.filter((r) => !q || (r.name_en + " " + r.name_ar + " " + (r.description_en || "") + " " + (r.description_ar || "")).toLowerCase().includes(q));
+  if (!data.length) { list.innerHTML = `<div class="empty">${esc(Site.t("col_empty"))}</div>`; return; }
+  const sectors = new Map();
+  for (const r of data) {
+    if (!sectors.has(r.sector_code)) sectors.set(r.sector_code, { row: r, cats: new Map() });
+    const s = sectors.get(r.sector_code); const ck = r.category_id || "_";
+    if (!s.cats.has(ck)) s.cats.set(ck, { row: r, items: [] });
+    s.cats.get(ck).items.push(r);
+  }
+  list.innerHTML = [...sectors.values()].map((s) => `
+    <section class="sector" id="${esc(SECTOR_ANCHORS[s.row.sector_code] || s.row.sector_code)}">
+      <h2>${esc(Site.pick(s.row, "sector"))}</h2>
+      <div class="cnt">${[...s.cats.values()].reduce((n, c) => n + c.items.length, 0)} ${esc(Site.t("products"))}</div>
+      <div class="cats">${[...s.cats.values()].map((c) => `
+        <div class="cat"><h3>${esc(c.row.category_id ? Site.pick(c.row, "category") : Site.pick(c.row, "sector"))}</h3>
+          ${c.items.map((p) => `<a href="product.html?id=${esc(p.id)}">${esc(Site.pick(p, "name"))}</a>`).join("")}
+        </div>`).join("")}
+      </div>
+    </section>`).join("");
+  if (location.hash) { const el = document.querySelector(location.hash); if (el) el.scrollIntoView(); }
+}
+document.getElementById("q").value = new URLSearchParams(location.search).get("q") || "";
+document.getElementById("q").addEventListener("input", render);
+document.addEventListener("langchange", render);
+Site.catalogue().then((r) => { rows = r; render(); }).catch((e) => { document.getElementById("list").innerHTML = `<div class="empty">${esc(Site.t("error"))}<br><small>${esc(e.message)}</small></div>`; });
+</script>
+</body>
+</html>
