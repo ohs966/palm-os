@@ -11,24 +11,24 @@ window.PALM = {
 
 /* The nine industries. `sector` is the Palm OS sector code whose products are listed under the industry. */
 const INDUSTRIES = [
-  { code: "uniforms", sector: ["uniforms"], tint: "t1", img: "img/uniforms.jpg", en: ["Uniforms", "& Workwear", "Hotel, medical, school, industrial and security uniforms, branded to your specification."], ar: ["اليونيفورم", "وملابس العمل", "يونيفورم فنادق وطبي ومدارس وصناعي وأمن، بعلامتك ومواصفاتك."] },
-  { code: "hospitality", sector: ["hospitality"], tint: "t8", img: "img/hotel.jpg", en: ["Hospitality", "& Hotel Supplies", "In-room amenities, bathrobes, slippers, linen and front-of-house products for hotels and resorts."], ar: ["الضيافة", "ومستلزمات الفنادق", "مستلزمات الغرف والأرواب والشباشب والبياضات ومنتجات الاستقبال للفنادق والمنتجعات."] },
-  { code: "housekeeping", sector: ["housekeeping_buffet", "cleaning"], tint: "t2", img: "img/cleaning.jpg", en: ["Housekeeping", "& Cleaning Supplies", "Chemicals, tools, microfibre, trolleys, dispensers and consumables for facilities of any size."], ar: ["الهاوس كيبينج", "ومستلزمات النظافة", "منظفات وأدوات ومايكروفايبر وعربات وموزعات ومستهلكات لأي منشأة."] },
-  { code: "kitchen", sector: ["kitchen_equipment"], tint: "t5", img: "img/kitchen.jpg", en: ["Kitchen", "& Buffet Equipment", "Commercial ranges, refrigeration, prep tables, chafing dishes and buffet service ware."], ar: ["المطابخ", "ومعدات البوفيه", "أفران ومعدات تبريد وطاولات تحضير وأواني تقديم وأدوات بوفيه."] },
-  { code: "meals", sector: ["fnb_meals"], tint: "t7", img: "img/meals.jpg", en: ["Ready Meals", "& Catering", "Prepared meals for staff canteens, schools, hospitals and events, delivered daily."], ar: ["الوجبات الجاهزة", "والتموين", "وجبات جاهزة لكافتيريات الموظفين والمدارس والمستشفيات والفعاليات، تُسلَّم يومياً."] },
-  { code: "security", sector: ["security"], tint: "t6", img: "img/security.jpg", en: ["Security", "Equipment", "Guard uniforms, radios, access control accessories and site safety gear for security firms."], ar: ["معدات", "الأمن", "يونيفورم حراسة، أجهزة لاسلكي، تحكم في الدخول ومعدات سلامة لشركات الأمن."] },
-  { code: "construction", sector: ["construction"], tint: "t4", img: "img/construction.jpg", en: ["Construction", "& Site Equipment", "PPE, tools, site consumables and safety signage for contractors and industrial sites."], ar: ["الإنشاءات", "ومعدات المواقع", "معدات وقاية وعدد ومستهلكات مواقع ولافتات سلامة للمقاولين والمنشآت الصناعية."] },
-  { code: "textiles", sector: ["fashion_textiles"], tint: "t3", img: "img/textiles.jpg", en: ["Textiles", "& Fabrics", "Fabrics, trims and finished garments for brands, retailers and workshops."], ar: ["المنسوجات", "والأقمشة", "أقمشة وإكسسوارات وملابس جاهزة للعلامات التجارية والمتاجر والورش."] },
+  { code: "uniforms", sector: ["uniforms"], tint: "t1", color: "#2f5bd6", img: "img/uniforms.jpg", en: ["Uniforms", "& Workwear", "Hotel, medical, school, industrial and security uniforms, branded to your specification."], ar: ["اليونيفورم", "وملابس العمل", "يونيفورم فنادق وطبي ومدارس وصناعي وأمن، بعلامتك ومواصفاتك."] },
+  { code: "hospitality", sector: ["hospitality"], tint: "t8", color: "#c9a24a", img: "img/hotel.jpg", en: ["Hospitality", "& Hotel Supplies", "In-room amenities, bathrobes, slippers, linen and front-of-house products for hotels and resorts."], ar: ["الضيافة", "ومستلزمات الفنادق", "مستلزمات الغرف والأرواب والشباشب والبياضات ومنتجات الاستقبال للفنادق والمنتجعات."] },
+  { code: "housekeeping", sector: ["housekeeping_buffet", "cleaning"], tint: "t2", color: "#19a6c9", img: "img/cleaning.jpg", en: ["Housekeeping", "& Cleaning Supplies", "Chemicals, tools, microfibre, trolleys, dispensers and consumables for facilities of any size."], ar: ["الهاوس كيبينج", "ومستلزمات النظافة", "منظفات وأدوات ومايكروفايبر وعربات وموزعات ومستهلكات لأي منشأة."] },
+  { code: "kitchen", sector: ["kitchen_equipment"], tint: "t5", color: "#e06a1f", img: "img/kitchen.jpg", en: ["Kitchen", "& Buffet Equipment", "Commercial ranges, refrigeration, prep tables, chafing dishes and buffet service ware."], ar: ["المطابخ", "ومعدات البوفيه", "أفران ومعدات تبريد وطاولات تحضير وأواني تقديم وأدوات بوفيه."] },
+  { code: "meals", sector: ["fnb_meals"], tint: "t7", color: "#3aa655", img: "img/meals.jpg", en: ["Ready Meals", "& Catering", "Prepared meals for staff canteens, schools, hospitals and events, delivered daily."], ar: ["الوجبات الجاهزة", "والتموين", "وجبات جاهزة لكافتيريات الموظفين والمدارس والمستشفيات والفعاليات، تُسلَّم يومياً."] },
+  { code: "security", sector: ["security"], tint: "t6", color: "#8e9aa8", img: "img/security.jpg", en: ["Security", "Equipment", "Guard uniforms, radios, access control accessories and site safety gear for security firms."], ar: ["معدات", "الأمن", "يونيفورم حراسة، أجهزة لاسلكي، تحكم في الدخول ومعدات سلامة لشركات الأمن."] },
+  { code: "construction", sector: ["construction"], tint: "t4", color: "#f2b21b", img: "img/construction.jpg", en: ["Construction", "& Site Equipment", "PPE, tools, site consumables and safety signage for contractors and industrial sites."], ar: ["الإنشاءات", "ومعدات المواقع", "معدات وقاية وعدد ومستهلكات مواقع ولافتات سلامة للمقاولين والمنشآت الصناعية."] },
+  { code: "textiles", sector: ["fashion_textiles"], tint: "t3", color: "#d2487e", img: "img/textiles.jpg", en: ["Textiles", "& Fabrics", "Fabrics, trims and finished garments for brands, retailers and workshops."], ar: ["المنسوجات", "والأقمشة", "أقمشة وإكسسوارات وملابس جاهزة للعلامات التجارية والمتاجر والورش."] },
 ];
 window.INDUSTRIES = INDUSTRIES;
 
 const DICT = {
   en: {
-    nav_home: "Home", nav_supply: "We supply", nav_contact: "Contact", nav_quote: "Request quotation", nav_quote_short: "Quote", lang: "AR",
+    nav_home: "Home", nav_supply: "We Supply", nav_contact: "Contact", nav_quote: "Request Quotation", nav_quote_short: "Quote", lang: "AR",
     hero_tag: "General Supplies | Procurement | Import & Export", hero_call: "Call us", hero_places: "Cairo\nAlexandria\nGiza\nPort Said\nSuez\nIsmailia\nMansoura\nTanta\nZagazig\nAsyut\nLuxor\nAswan\nHurghada\nSharm El Sheikh\nAll of Egypt", hero_p: "Supplying the uniforms, equipment, meals and consumables that hotels, hospitals, schools, factories and security firms run on. One quotation, one contract, delivered on time.",
     hero_cta: "Request a quotation", hero_cta2: "What we supply",
     w_title: "What we supply", w_p: "Eight industries, one supplier. Slide through the cards and open any industry to see its products.",
-    see: "See products", card_tag: "Industry",
+    see: "See Products", wa: "WhatsApp Us", card_tag: "Industry",
     pt_label: "Clients and partners", pt_p: "Sectors and partners we work with",
     b_title: "Why businesses buy through Palm",
     b1t: "One contract", b1p: "Any mix of categories under a single quotation, contract and invoice.",
@@ -36,9 +36,9 @@ const DICT = {
     b3t: "Quality checked", b3p: "Each order is inspected before it leaves the supplier, then tracked to your door.",
     b4t: "Branded to spec", b4p: "Embroidery, printing and labels configured per item and included in the price.",
     f_nav: "Pages", f_contact: "Contact", f_more: "More", f_signin: "Team sign in", f_rights: "General supply company, Egypt",
-    s_title: "We supply", s_p: "Pick an industry to see the products we supply for it, then request a quotation.",
+    s_title: "We Supply", s_p: "Pick an industry to see the products we supply for it, then request a quotation.",
     s_all: "All industries", s_products: "products", s_none: "Products for this industry are being added. Request a quotation and tell us what you need.", s_back: "All industries",
-    q_title: "Request a quotation", q_p: "Tell us what you need and we come back with a full quotation within 48 hours.",
+    q_title: "Request Quotation", q_p: "Tell us what you need and we come back with a full quotation within 48 hours.",
     fm_company: "Company", fm_name: "Your name", fm_phone: "Phone or WhatsApp", fm_email: "Email", fm_industry: "Industry", fm_need: "What do you need?", fm_qty: "Approximate quantity", fm_send: "Send request", fm_pick: "Choose...",
     fm_ok: "Thank you. Your request is in our system; we will come back to you within 48 hours.", fm_bad: "Could not send the request. Please call or WhatsApp us instead.",
     c_call: "Call", c_wa: "WhatsApp", c_mail: "Email", loading: "Loading...", unit: "Unit",
@@ -48,7 +48,7 @@ const DICT = {
     hero_tag: "توريدات عامة | مشتريات | استيراد وتصدير", hero_call: "اتصل بنا", hero_places: "القاهرة\nالإسكندرية\nالجيزة\nبورسعيد\nالسويس\nالإسماعيلية\nالمنصورة\nطنطا\nالزقازيق\nأسيوط\nالأقصر\nأسوان\nالغردقة\nشرم الشيخ\nكل مصر", hero_p: "نورّد اليونيفورم والمعدات والوجبات والمستهلكات التي تعمل بها الفنادق والمستشفيات والمدارس والمصانع وشركات الأمن. عرض سعر واحد، عقد واحد، تسليم في الموعد.",
     hero_cta: "اطلب عرض سعر", hero_cta2: "ماذا نورّد",
     w_title: "ماذا نورّد", w_p: "ثمانية قطاعات، مورّد واحد. مرّر البطاقات وافتح أي قطاع لترى منتجاته.",
-    see: "عرض المنتجات", card_tag: "قطاع",
+    see: "عرض المنتجات", wa: "راسلنا واتساب", card_tag: "قطاع",
     pt_label: "عملاء وشركاء", pt_p: "قطاعات وشركاء نعمل معهم",
     b_title: "لماذا تشتري الشركات عبر بالم",
     b1t: "عقد واحد", b1p: "أي مزيج من الفئات تحت عرض سعر وعقد وفاتورة واحدة.",
@@ -97,7 +97,7 @@ const Site = {
       <div class="cols">
         <div><span class="mono" data-t="f_nav"></span><a href="index.html" data-t="nav_home"></a><a href="supply.html" data-t="nav_supply"></a><a href="quote.html#contact" data-t="nav_contact"></a><a href="quote.html" data-t="nav_quote"></a></div>
         <div><span class="mono" data-t="f_contact"></span><a href="tel:${PALM.phone.replace(/\s/g, "")}" dir="ltr">${PALM.phone}</a><a href="https://wa.me/${wa}">WhatsApp</a><a href="mailto:${PALM.email}">${PALM.email}</a></div>
-        <div><span class="mono" data-t="f_more"></span><a href="#">LinkedIn</a><a href="#">Instagram</a><a href="${PALM.osUrl}" data-t="f_signin"></a></div>
+        <div><span class="mono" data-t="f_more"></span><a href="#">LinkedIn</a><a href="#">Instagram</a></div>
       </div>
       <div class="base"><span>&copy; ${new Date().getFullYear()} Palm General Suppliers</span><span data-t="f_rights"></span></div></footer>`;
   },

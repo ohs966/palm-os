@@ -268,3 +268,31 @@ body.home .header { opacity: 1; pointer-events: auto; }
 @media (min-width: 760px) { .marquee span.logo img { height: 56px; } .marquee span.logo { padding: 0 56px; } }
 .wcard.t2 { background: #cfd7e3; }
 .marquee span.logo img { max-width: none; }
+
+/* ---------- v8: black second section, glass cards ---------- */
+.hero .scroll { display: block; width: 40px; height: 3px; background: #f1ecdf; border-radius: 2px; bottom: 0; }
+.dark-wrap { background: var(--black); color: #fff; }
+.wallet-head { padding: 26px 18px 14px; text-align: center; }
+.wallet-head h2 { color: #fff; }
+.wallet-head p { color: rgba(255,255,255,.6); margin: 8px auto 0; }
+.wallet { padding-bottom: 28px; }
+.wcard.glass { background: rgba(255,255,255,.07); color: #fff; border: 1px solid rgba(255,255,255,.18); backdrop-filter: blur(16px) saturate(140%); -webkit-backdrop-filter: blur(16px) saturate(140%); box-shadow: 0 -10px 40px rgba(0,0,0,.5), 0 1px 0 rgba(255,255,255,.12) inset; position: sticky; overflow: hidden; }
+.wcard.glass::before { content: ""; position: absolute; inset: -40% -20% auto -20%; height: 70%; background: radial-gradient(60% 60% at 50% 20%, color-mix(in srgb, var(--accent) 55%, transparent) 0%, transparent 70%); pointer-events: none; }
+.wcard.glass > * { position: relative; }
+.wcard.glass .tags .pill { border-color: rgba(255,255,255,.35); }
+.wcard.glass .tags .pill:first-child { background: var(--accent); border-color: var(--accent); color: #fff; }
+.wcard.glass .sub { opacity: .7; }
+.wcard.glass .act { display: flex; gap: 8px; flex-wrap: wrap; }
+.wcard.glass .im { border-radius: 22px 22px 0 0; height: 300px; background-color: #000; background-size: cover; background-position: center top; border-top: 1px solid rgba(255,255,255,.12); }
+.wcard.glass .pill.solid { background: rgba(0,0,0,.6); border-color: rgba(255,255,255,.3); }
+.wcard.glass .pill.white { background: rgba(255,255,255,.9); color: #111; padding: 10px 16px; }
+.wcard.glass .pill.white:hover { background: #fff; }
+.partners { padding: 34px 0 44px; }
+.partners .wrap { justify-content: center; }
+@media (min-width: 760px) { .wallet-head { padding: 40px 48px 20px; } .wcard.glass .im { height: 380px; } }
+
+body.home { background: var(--black); }
+body.home footer { border-radius: 0; border-top: 1px solid rgba(255,255,255,.12); }
+.wcard.glass::before { background: radial-gradient(70% 70% at 50% 10%, color-mix(in srgb, var(--accent) 70%, transparent) 0%, transparent 72%); opacity: .85; }
+.wcard.glass { border-top: 1px solid color-mix(in srgb, var(--accent) 60%, rgba(255,255,255,.3)); }
+.wcard.glass .im { display: block; }
