@@ -1,16 +1,16 @@
 /* Palm Trade website, mobile first. */
 :root {
   --black: #0d0d0d; --ink: #141414; --paper: #efe9df; --paper-2: #e6dfd2; --white: #fff;
-  --muted: #7d776d; --line: rgba(0,0,0,.12); --clay: #8a3731; --clay-2: #a84a43;
+  --muted: #7d776d; --line: rgba(0,0,0,.12); --clay: #1f4fd6; --clay-2: #3b66e6;
   --nav-h: 56px;
-  --f-display: "Unbounded", "IBM Plex Sans Arabic", system-ui, sans-serif;
-  --f-mono: "Space Mono", "IBM Plex Sans Arabic", monospace;
-  --f-body: "Inter", "IBM Plex Sans Arabic", system-ui, sans-serif;
+  --f-display: "Helvetica Neue", Helvetica, Arial, "IBM Plex Sans Arabic", sans-serif;
+  --f-mono: "Helvetica Neue", Helvetica, Arial, "IBM Plex Sans Arabic", sans-serif;
+  --f-body: "Helvetica Neue", Helvetica, Arial, "IBM Plex Sans Arabic", sans-serif;
 }
 * { box-sizing: border-box; }
 html { scroll-behavior: smooth; }
 body { margin: 0; background: var(--paper); color: var(--ink); font-family: var(--f-body); font-size: 15px; line-height: 1.55; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
-[dir="rtl"] body { --f-display: "IBM Plex Sans Arabic", "Unbounded", sans-serif; --f-mono: "IBM Plex Sans Arabic", "Space Mono", monospace; --f-body: "IBM Plex Sans Arabic", "Inter", sans-serif; }
+[dir="rtl"] body { --f-display: "IBM Plex Sans Arabic", "Helvetica Neue", Helvetica, Arial, sans-serif; --f-mono: "IBM Plex Sans Arabic", "Helvetica Neue", Helvetica, Arial, sans-serif; --f-body: "IBM Plex Sans Arabic", "Helvetica Neue", Helvetica, Arial, sans-serif; }
 a { color: inherit; text-decoration: none; } button { font: inherit; cursor: pointer; } img { display: block; max-width: 100%; }
 h1, h2, h3 { font-family: var(--f-display); font-weight: 700; letter-spacing: -0.02em; line-height: 1.05; margin: 0; }
 .mono { font-family: var(--f-mono); font-size: 11px; letter-spacing: .06em; text-transform: uppercase; }
@@ -167,3 +167,26 @@ body.home .header.scrolled { opacity: 1; pointer-events: auto; }
 .hero .navpill a, .hero .navpill button { pointer-events: auto; }
 .hero .navpill { display: inline-flex; width: max-content; max-width: 100%; }
 .hero .word + #heronav { text-align: center; }
+
+/* ---------- glossy chrome glass buttons ---------- */
+.pill.solid, .pill.clay, .ind .go, .ben .emblem, .form button.pill, .navpill a.cta, .navpill a.on {
+  background: linear-gradient(180deg, rgba(255,255,255,.98) 0%, rgba(228,231,236,.95) 42%, rgba(178,184,194,.92) 50%, rgba(214,218,225,.95) 70%, rgba(250,251,253,.98) 100%);
+  color: #111; border: 1px solid rgba(255,255,255,.85);
+  box-shadow: 0 1px 0 rgba(255,255,255,.9) inset, 0 -1px 0 rgba(0,0,0,.08) inset, 0 8px 22px rgba(0,0,0,.22), 0 0 0 1px rgba(0,0,0,.08);
+  backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+  text-shadow: 0 1px 0 rgba(255,255,255,.6); position: relative; overflow: hidden;
+}
+.pill.solid::before, .pill.clay::before, .form button.pill::before, .navpill a.cta::before, .navpill a.on::before { content: ""; position: absolute; inset: 1px 1px 50% 1px; border-radius: 999px 999px 40% 40%; background: linear-gradient(180deg, rgba(255,255,255,.85), rgba(255,255,255,0)); pointer-events: none; }
+.pill.solid:hover, .pill.clay:hover, .form button.pill:hover, .navpill a.cta:hover { background: linear-gradient(180deg, #fff 0%, #e9ecf1 42%, #c0c6d0 50%, #e0e4ea 70%, #fff 100%); color: #000; }
+.pill.clay, .form button.pill, .navpill a.cta { color: var(--clay); }
+.ben .emblem, .ben:nth-child(2n) .emblem { color: var(--clay); }
+.ind .go { color: #111; }
+.navpill a.on { color: #111; }
+.pill.solid svg, .pill.clay svg { position: relative; }
+/* hero without wordmark: tagline on top */
+.hero .word { font-size: 0; margin-top: 0; }
+.hero .word small { font-size: 12px; letter-spacing: .14em; font-weight: 700; text-transform: uppercase; opacity: 1; margin-top: 0; white-space: nowrap; }
+[dir="rtl"] .hero .word small { letter-spacing: 0; font-size: 13px; }
+footer .word { display: none; }
+.hero .word small { white-space: normal; text-align: center; font-size: 11px; line-height: 1.6; max-width: 320px; margin: 0 auto; }
+@media (min-width: 760px) { .hero .word small { font-size: 13px; max-width: none; } }

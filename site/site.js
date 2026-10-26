@@ -26,7 +26,7 @@ window.INDUSTRIES = INDUSTRIES;
 const DICT = {
   en: {
     nav_home: "Home", nav_supply: "We supply", nav_quote: "Request quotation", lang: "AR",
-    hero_tag: "General supply company", hero_places: "Cairo\nAlexandria\nAll of Egypt", hero_p: "Supplying the uniforms, equipment, meals and consumables that hotels, hospitals, schools, factories and security firms run on. One quotation, one contract, delivered on time.",
+    hero_tag: "General Supplies | Procurement | Import & Export", hero_call: "Call us", hero_places: "Cairo\nAlexandria\nAll of Egypt", hero_p: "Supplying the uniforms, equipment, meals and consumables that hotels, hospitals, schools, factories and security firms run on. One quotation, one contract, delivered on time.",
     hero_cta: "Request a quotation", hero_cta2: "What we supply",
     w_title: "What we supply", w_p: "Nine industries, one supplier. Slide through the cards and open any industry to see its products.",
     see: "See products", card_tag: "Industry",
@@ -46,7 +46,7 @@ const DICT = {
   },
   ar: {
     nav_home: "الرئيسية", nav_supply: "ماذا نورّد", nav_quote: "اطلب عرض سعر", lang: "EN",
-    hero_tag: "شركة توريدات عامة", hero_places: "القاهرة\nالإسكندرية\nكل مصر", hero_p: "نورّد اليونيفورم والمعدات والوجبات والمستهلكات التي تعمل بها الفنادق والمستشفيات والمدارس والمصانع وشركات الأمن. عرض سعر واحد، عقد واحد، تسليم في الموعد.",
+    hero_tag: "توريدات عامة | مشتريات | استيراد وتصدير", hero_call: "اتصل بنا", hero_places: "القاهرة\nالإسكندرية\nكل مصر", hero_p: "نورّد اليونيفورم والمعدات والوجبات والمستهلكات التي تعمل بها الفنادق والمستشفيات والمدارس والمصانع وشركات الأمن. عرض سعر واحد، عقد واحد، تسليم في الموعد.",
     hero_cta: "اطلب عرض سعر", hero_cta2: "ماذا نورّد",
     w_title: "ماذا نورّد", w_p: "تسعة قطاعات، مورّد واحد. مرّر البطاقات وافتح أي قطاع لترى منتجاته.",
     see: "عرض المنتجات", card_tag: "قطاع",
@@ -92,7 +92,7 @@ const Site = {
   footer() {
     const wa = PALM.phone.replace(/[^\d]/g, "");
     return `<footer>
-      <div class="word">PALM<br>TRADE</div>
+      <div class="word"></div>
       <div class="cols">
         <div><span class="mono" data-t="f_nav"></span><a href="index.html" data-t="nav_home"></a><a href="supply.html" data-t="nav_supply"></a><a href="quote.html" data-t="nav_quote"></a></div>
         <div><span class="mono" data-t="f_contact"></span><a href="tel:${PALM.phone.replace(/\s/g, "")}" dir="ltr">${PALM.phone}</a><a href="https://wa.me/${wa}">WhatsApp</a><a href="mailto:${PALM.email}">${PALM.email}</a></div>
