@@ -362,3 +362,9 @@ footer .fbrand img { height: 20px; width: auto; }
 .navpill a.on { background: rgba(255,255,255,.95); color: #000; border-color: #fff; box-shadow: 0 1px 0 #fff inset, 0 6px 18px rgba(0,0,0,.25); }
 .navpill a.on::before { display: none; }
 .navpill a:active, .navpill a:hover { background: rgba(255,255,255,.95); color: #000; }
+.navpill a.brand, .navpill a.brand:hover, .navpill a.brand:active { background: transparent; color: #fff; box-shadow: none; }
+
+/* v12: the exact hero artwork, cut out and shown at its native size (never stretched) */
+.hero-brand img { width: min(72vw, 475px); height: auto; image-rendering: auto; }
+@media (min-width: 760px) { .hero-brand img { width: 475px; } }
+@media (min-width: 1300px) { .hero-brand img { width: 475px; } }
