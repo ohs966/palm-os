@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+<head>
+<title>Request a quotation | Palm Trade</title>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="styles.css" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Crect width=%2732%27 height=%2732%27 rx=%278%27 fill=%27%238a3731%27/%3E%3Ctext x=%2716%27 y=%2722%27 font-size=%2718%27 font-family=%27Arial%27 font-weight=%27700%27 fill=%27white%27 text-anchor=%27middle%27%3EP%3C/text%3E%3C/svg%3E" />
+</head>
+<body>
+<section class="page-head"><div class="tags"><span class="pill">48h</span></div><h1 data-t="q_title"></h1><p data-t="q_p"></p></section>
+<div id="form"></div>
+<div class="contact-lines" id="lines"></div>
+<script src="site.js"></script>
+<script>
+window.PAGE = function () {
+  const q = new URLSearchParams(location.search);
+  Site.form(document.getElementById("form"), { industry: q.get("industry") || "", need: q.get("product") ? q.get("product") + "\n" : "" });
+  const wa = PALM.phone.replace(/[^\d]/g, "");
+  const draw = () => { document.getElementById("lines").innerHTML = '<a href="tel:' + PALM.phone.replace(/\s/g, "") + '"><span class="mono">' + Site.t("c_call") + '</span><span dir="ltr">' + PALM.phone + '</span></a><a href="https://wa.me/' + wa + '"><span class="mono">' + Site.t("c_wa") + '</span><span dir="ltr">' + PALM.phone + '</span></a><a href="mailto:' + PALM.email + '"><span class="mono">' + Site.t("c_mail") + '</span><span>' + PALM.email + '</span></a>'; };
+  draw(); document.addEventListener("langchange", draw);
+};
+</script>
+</body>
+</html>

@@ -1,15 +1,57 @@
 <!doctype html>
-<html lang="en" dir="ltr">
+<html lang="en">
 <head>
+<title>Palm Trade | General supply company, Egypt</title>
+<meta name="description" content="Palm Trade supplies uniforms, security, cleaning, textiles, construction and kitchen equipment, ready meals, hotel, housekeeping and buffet products to businesses across Egypt." />
 <meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Palm OS</title>
-<meta name="description" content="Internal operating system of SSS: quotations, orders, suppliers, catalogue." />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" />
-<link rel="stylesheet" href="https://gsgniarlokepcsagvvmq.supabase.co/storage/v1/object/public/app/styles.v2.css" />
-<script type="importmap">{"imports":{"@supabase/supabase-js":"https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.4/+esm"}}</script>
-<script src="https://gsgniarlokepcsagvvmq.supabase.co/storage/v1/object/public/app/config.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="styles.css" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Crect width=%2732%27 height=%2732%27 rx=%278%27 fill=%27%238a3731%27/%3E%3Ctext x=%2716%27 y=%2722%27 font-size=%2718%27 font-family=%27Arial%27 font-weight=%27700%27 fill=%27white%27 text-anchor=%27middle%27%3EP%3C/text%3E%3C/svg%3E" />
 </head>
-<body><div id="root"></div><script type="module" src="https://gsgniarlokepcsagvvmq.supabase.co/storage/v1/object/public/app/app.v2.js"></script></body>
+<body class="home">
+<section class="hero" style="background-image:url(img/hero.jpg)">
+  <div><div class="word"><small data-t="hero_tag"></small></div><div id="heronav"></div></div>
+  <div>
+    <div class="foot"><div class="places" id="places"></div></div>
+    <div class="cta-row"><a class="pill solid" id="callus" href="tel:+201000000000"><span data-t="hero_call"></span></a></div>
+  </div>
+  <div class="scroll"></div>
+</section>
+
+<div class="wallet-head"><h2 data-t="w_title"></h2><p data-t="w_p"></p></div>
+<div class="wallet" id="wallet"></div>
+
+<section class="partners">
+  <div class="wrap"><span class="mono" data-t="pt_label"></span><span class="mono" style="opacity:.5" data-t="pt_p"></span></div>
+  <div id="marq1"></div>
+  <div id="marq2" style="margin-top:14px"></div>
+</section>
+
+<section class="benefits">
+  <h2 data-t="b_title"></h2>
+  <div class="bgrid">
+    <div class="ben"><div class="emblem"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><path d="M14 3v6h6M8 13h8M8 17h5"/></svg></div><h3 data-t="b1t"></h3><p data-t="b1p"></p></div>
+    <div class="ben"><div class="emblem"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></div><h3 data-t="b2t"></h3><p data-t="b2p"></p></div>
+    <div class="ben"><div class="emblem"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v5c0 5-3.5 8-7 10-3.5-2-7-5-7-10V6z"/><path d="M9 12l2 2 4-4"/></svg></div><h3 data-t="b3t"></h3><p data-t="b3p"></p></div>
+    <div class="ben"><div class="emblem"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12l-8 8-8-8 8-8z"/><path d="M12 8v8M8 12h8"/></svg></div><h3 data-t="b4t"></h3><p data-t="b4p"></p></div>
+  </div>
+</section>
+
+<script src="site.js"></script>
+<script>
+window.PAGE = function () {
+  const draw = () => {
+    document.getElementById("heronav").innerHTML = document.querySelector(".navpill").outerHTML; document.querySelectorAll("#heronav [data-lang-toggle]").forEach((b) => b.addEventListener("click", () => Site.setLang(Site.lang === "ar" ? "en" : "ar")));
+    document.getElementById("places").innerHTML = Site.t("hero_places").split("\n").map(Site.esc).join("<br>");
+    document.getElementById("wallet").innerHTML = INDUSTRIES.map((x, i) => '<a class="wcard ' + x.tint + '" href="supply.html?industry=' + x.code + '" style="top:calc(var(--nav-h) + ' + (8 + i * 6) + 'px)"><div class="tags"><span class="pill">0' + (i + 1) + '</span><span class="pill">' + Site.esc(Site.t("card_tag")) + '</span></div><h3>' + Site.esc(Site.i(x, 0)) + '</h3><div class="sub">' + Site.esc(Site.i(x, 1)) + '</div><div class="act"><span class="pill solid">' + Site.esc(Site.t("see")) + '<svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M8 7h9v9"/></svg></span></div><div class="im" style="background-image:url(' + x.img + ')"></div></a>').join("");
+    document.getElementById("marq1").innerHTML = Site.marquee(PALM.partners);
+    document.getElementById("marq2").innerHTML = Site.marquee(INDUSTRIES.map((x) => Site.i(x, 0)), "rev small");
+    Site.apply();
+  };
+  draw(); document.addEventListener("langchange", draw);
+};
+</script>
+</body>
 </html>
