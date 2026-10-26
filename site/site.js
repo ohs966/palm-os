@@ -6,32 +6,31 @@ window.PALM = {
   phone: "+20 100 000 0000",
   email: "sales@palmtrade.eg",
   /* Clients and partners shown in the scrolling strip. Replace with real names (or logo <img> tags) when available. */
-  partners: ["Hotels", "Hospitals", "Schools", "Factories", "Restaurants", "Security firms", "Contractors", "Corporate offices"],
+  partners: ["img/partners/1.png", "img/partners/2.png", "img/partners/3.png"],
 };
 
 /* The nine industries. `sector` is the Palm OS sector code whose products are listed under the industry. */
 const INDUSTRIES = [
-  { code: "security", sector: "security", tint: "t6", img: "img/security.jpg", en: ["Security Equipment", "Supplies", "Uniforms, radios, access control and site safety gear for security firms."], ar: ["معدات الأمن", "توريدات", "يونيفورم، أجهزة لاسلكي، تحكم في الدخول ومعدات سلامة لشركات الأمن."] },
-  { code: "uniforms", sector: "uniforms", tint: "t1", img: "img/uniforms.jpg", en: ["Uniforms", "Supplies", "Hotel, medical, school, industrial and security uniforms, branded to your specification."], ar: ["اليونيفورم", "توريدات", "يونيفورم فنادق وطبي ومدارس وصناعي وأمن، بعلامتك ومواصفاتك."] },
-  { code: "cleaning", sector: "cleaning", tint: "t2", img: "img/cleaning.jpg", en: ["Cleaning", "Supplies", "Chemicals, tools, microfibre, dispensers and consumables for facilities of any size."], ar: ["مستلزمات النظافة", "توريدات", "منظفات وأدوات ومايكروفايبر وموزعات ومستهلكات لأي منشأة."] },
-  { code: "textiles", sector: "fashion_textiles", tint: "t3", img: "img/textiles.jpg", en: ["Fashion Textiles", "Supplies", "Fabrics, trims and finished garments for brands, retailers and workshops."], ar: ["أقمشة ومنسوجات", "توريدات", "أقمشة وإكسسوارات وملابس جاهزة للعلامات التجارية والمتاجر والورش."] },
-  { code: "construction", sector: "construction", tint: "t4", img: "img/construction.jpg", en: ["Construction Equipment", "Supplies", "PPE, tools, site consumables and safety signage for contractors and industrial sites."], ar: ["معدات الإنشاءات", "توريدات", "معدات وقاية وعدد ومستهلكات مواقع ولافتات سلامة للمقاولين والمنشآت الصناعية."] },
-  { code: "kitchen", sector: "kitchen_equipment", tint: "t5", img: "img/kitchen.jpg", en: ["Kitchen Equipment", "Supplies", "Commercial ranges, refrigeration, prep tables and smallwares for restaurants and hotels."], ar: ["معدات المطابخ", "توريدات", "أفران ومعدات تبريد وطاولات تحضير وأدوات للمطاعم والفنادق."] },
-  { code: "meals", sector: "fnb_meals", tint: "t7", img: "img/meals.jpg", en: ["F&B Wholesale", "Ready Meals", "Prepared meals for staff canteens, schools, hospitals and events, delivered daily."], ar: ["وجبات جاهزة", "بالجملة", "وجبات جاهزة لكافتيريات الموظفين والمدارس والمستشفيات والفعاليات، تُسلَّم يومياً."] },
-  { code: "hotel", sector: "hospitality", tint: "t8", img: "img/hotel.jpg", en: ["Hotel", "Supplies", "In-room amenities, bathrobes, slippers, front-of-house and guest products."], ar: ["مستلزمات الفنادق", "توريدات", "مستلزمات الغرف والأرواب والشباشب ومنتجات الاستقبال والضيوف."] },
-  { code: "housekeeping", sector: "housekeeping_buffet", tint: "t9", img: "img/housekeeping.jpg", en: ["Housekeeping & Buffet", "Supplies", "Linen, towels, trolleys, chafing dishes and buffet service ware."], ar: ["هاوس كيبينج وبوفيه", "توريدات", "بياضات وفوط وعربات وأواني تقديم وأدوات بوفيه."] },
+  { code: "uniforms", sector: ["uniforms"], tint: "t1", img: "img/uniforms.jpg", en: ["Uniforms", "& Workwear", "Hotel, medical, school, industrial and security uniforms, branded to your specification."], ar: ["اليونيفورم", "وملابس العمل", "يونيفورم فنادق وطبي ومدارس وصناعي وأمن، بعلامتك ومواصفاتك."] },
+  { code: "hospitality", sector: ["hospitality"], tint: "t8", img: "img/hotel.jpg", en: ["Hospitality", "& Hotel Supplies", "In-room amenities, bathrobes, slippers, linen and front-of-house products for hotels and resorts."], ar: ["الضيافة", "ومستلزمات الفنادق", "مستلزمات الغرف والأرواب والشباشب والبياضات ومنتجات الاستقبال للفنادق والمنتجعات."] },
+  { code: "housekeeping", sector: ["housekeeping_buffet", "cleaning"], tint: "t2", img: "img/cleaning.jpg", en: ["Housekeeping", "& Cleaning Supplies", "Chemicals, tools, microfibre, trolleys, dispensers and consumables for facilities of any size."], ar: ["الهاوس كيبينج", "ومستلزمات النظافة", "منظفات وأدوات ومايكروفايبر وعربات وموزعات ومستهلكات لأي منشأة."] },
+  { code: "kitchen", sector: ["kitchen_equipment"], tint: "t5", img: "img/kitchen.jpg", en: ["Kitchen", "& Buffet Equipment", "Commercial ranges, refrigeration, prep tables, chafing dishes and buffet service ware."], ar: ["المطابخ", "ومعدات البوفيه", "أفران ومعدات تبريد وطاولات تحضير وأواني تقديم وأدوات بوفيه."] },
+  { code: "meals", sector: ["fnb_meals"], tint: "t7", img: "img/meals.jpg", en: ["Ready Meals", "& Catering", "Prepared meals for staff canteens, schools, hospitals and events, delivered daily."], ar: ["الوجبات الجاهزة", "والتموين", "وجبات جاهزة لكافتيريات الموظفين والمدارس والمستشفيات والفعاليات، تُسلَّم يومياً."] },
+  { code: "security", sector: ["security"], tint: "t6", img: "img/security.jpg", en: ["Security", "Equipment", "Guard uniforms, radios, access control accessories and site safety gear for security firms."], ar: ["معدات", "الأمن", "يونيفورم حراسة، أجهزة لاسلكي، تحكم في الدخول ومعدات سلامة لشركات الأمن."] },
+  { code: "construction", sector: ["construction"], tint: "t4", img: "img/construction.jpg", en: ["Construction", "& Site Equipment", "PPE, tools, site consumables and safety signage for contractors and industrial sites."], ar: ["الإنشاءات", "ومعدات المواقع", "معدات وقاية وعدد ومستهلكات مواقع ولافتات سلامة للمقاولين والمنشآت الصناعية."] },
+  { code: "textiles", sector: ["fashion_textiles"], tint: "t3", img: "img/textiles.jpg", en: ["Textiles", "& Fabrics", "Fabrics, trims and finished garments for brands, retailers and workshops."], ar: ["المنسوجات", "والأقمشة", "أقمشة وإكسسوارات وملابس جاهزة للعلامات التجارية والمتاجر والورش."] },
 ];
 window.INDUSTRIES = INDUSTRIES;
 
 const DICT = {
   en: {
     nav_home: "Home", nav_supply: "We supply", nav_contact: "Contact", nav_quote: "Request quotation", nav_quote_short: "Quote", lang: "AR",
-    hero_tag: "General Supplies | Procurement | Import & Export", hero_call: "Call us", hero_places: "Cairo\nAlexandria\nAll of Egypt", hero_p: "Supplying the uniforms, equipment, meals and consumables that hotels, hospitals, schools, factories and security firms run on. One quotation, one contract, delivered on time.",
+    hero_tag: "General Supplies | Procurement | Import & Export", hero_call: "Call us", hero_places: "Cairo\nAlexandria\nGiza\nPort Said\nSuez\nIsmailia\nMansoura\nTanta\nZagazig\nAsyut\nLuxor\nAswan\nHurghada\nSharm El Sheikh\nAll of Egypt", hero_p: "Supplying the uniforms, equipment, meals and consumables that hotels, hospitals, schools, factories and security firms run on. One quotation, one contract, delivered on time.",
     hero_cta: "Request a quotation", hero_cta2: "What we supply",
-    w_title: "What we supply", w_p: "Nine industries, one supplier. Slide through the cards and open any industry to see its products.",
+    w_title: "What we supply", w_p: "Eight industries, one supplier. Slide through the cards and open any industry to see its products.",
     see: "See products", card_tag: "Industry",
     pt_label: "Clients and partners", pt_p: "Sectors and partners we work with",
-    b_title: "Why businesses buy through Palm Trade",
+    b_title: "Why businesses buy through Palm",
     b1t: "One contract", b1p: "Any mix of categories under a single quotation, contract and invoice.",
     b2t: "48-hour quotation", b2p: "Every variant priced and lead times confirmed within two working days.",
     b3t: "Quality checked", b3p: "Each order is inspected before it leaves the supplier, then tracked to your door.",
@@ -46,12 +45,12 @@ const DICT = {
   },
   ar: {
     nav_home: "الرئيسية", nav_supply: "ماذا نورّد", nav_contact: "اتصل بنا", nav_quote: "اطلب عرض سعر", nav_quote_short: "عرض سعر", lang: "EN",
-    hero_tag: "توريدات عامة | مشتريات | استيراد وتصدير", hero_call: "اتصل بنا", hero_places: "القاهرة\nالإسكندرية\nكل مصر", hero_p: "نورّد اليونيفورم والمعدات والوجبات والمستهلكات التي تعمل بها الفنادق والمستشفيات والمدارس والمصانع وشركات الأمن. عرض سعر واحد، عقد واحد، تسليم في الموعد.",
+    hero_tag: "توريدات عامة | مشتريات | استيراد وتصدير", hero_call: "اتصل بنا", hero_places: "القاهرة\nالإسكندرية\nالجيزة\nبورسعيد\nالسويس\nالإسماعيلية\nالمنصورة\nطنطا\nالزقازيق\nأسيوط\nالأقصر\nأسوان\nالغردقة\nشرم الشيخ\nكل مصر", hero_p: "نورّد اليونيفورم والمعدات والوجبات والمستهلكات التي تعمل بها الفنادق والمستشفيات والمدارس والمصانع وشركات الأمن. عرض سعر واحد، عقد واحد، تسليم في الموعد.",
     hero_cta: "اطلب عرض سعر", hero_cta2: "ماذا نورّد",
-    w_title: "ماذا نورّد", w_p: "تسعة قطاعات، مورّد واحد. مرّر البطاقات وافتح أي قطاع لترى منتجاته.",
+    w_title: "ماذا نورّد", w_p: "ثمانية قطاعات، مورّد واحد. مرّر البطاقات وافتح أي قطاع لترى منتجاته.",
     see: "عرض المنتجات", card_tag: "قطاع",
     pt_label: "عملاء وشركاء", pt_p: "قطاعات وشركاء نعمل معهم",
-    b_title: "لماذا تشتري الشركات عبر بالم تريد",
+    b_title: "لماذا تشتري الشركات عبر بالم",
     b1t: "عقد واحد", b1p: "أي مزيج من الفئات تحت عرض سعر وعقد وفاتورة واحدة.",
     b2t: "عرض سعر خلال 48 ساعة", b2p: "كل خيار مسعّر ومدد التوريد مؤكدة خلال يومي عمل.",
     b3t: "فحص جودة", b3p: "كل طلب يُفحص قبل مغادرة المورد ثم يُتابع حتى بابك.",
@@ -84,25 +83,25 @@ const Site = {
   header() {
     const on = (f) => (this.page() === f ? "on" : "");
     return `<div class="header" id="hdr"><nav class="navpill">
-      <a href="index.html" class="brand"><img src="img/emblem.png" alt="" /><span class="t">palm</span></a>
+      <a href="index.html" class="brand"><img src="img/emblem.png" alt="Palm" /></a>
       <a href="index.html" class="${on("index.html")}" data-t="nav_home"></a>
       <a href="supply.html" class="${on("supply.html")}" data-t="nav_supply"></a>
-      <a href="quote.html#contact" data-t="nav_contact"></a>
-      <button class="lang" data-lang-toggle data-t="lang"></button>
-      <a href="quote.html" class="cta"><span class="long" data-t="nav_quote"></span><span class="short" data-t="nav_quote_short"></span></a></nav></div>`;
+      <a href="quote.html" class="${on("quote.html")}"><span class="long" data-t="nav_quote"></span><span class="short" data-t="nav_quote_short"></span></a>
+      <span class="sep"></span>
+      <button class="lang" data-lang-toggle data-t="lang"></button></nav></div>`;
   },
   footer() {
     const wa = PALM.phone.replace(/[^\d]/g, "");
     return `<footer>
-      <div class="word" style="display:flex;align-items:center;gap:10px;font-size:28px;margin-bottom:26px"><img src="img/emblem.png" alt="" style="height:16px">palm</div>
+      <div class="word" style="margin-bottom:26px"><img src="img/emblem.png" alt="Palm" style="height:22px"></div>
       <div class="cols">
         <div><span class="mono" data-t="f_nav"></span><a href="index.html" data-t="nav_home"></a><a href="supply.html" data-t="nav_supply"></a><a href="quote.html#contact" data-t="nav_contact"></a><a href="quote.html" data-t="nav_quote"></a></div>
         <div><span class="mono" data-t="f_contact"></span><a href="tel:${PALM.phone.replace(/\s/g, "")}" dir="ltr">${PALM.phone}</a><a href="https://wa.me/${wa}">WhatsApp</a><a href="mailto:${PALM.email}">${PALM.email}</a></div>
         <div><span class="mono" data-t="f_more"></span><a href="#">LinkedIn</a><a href="#">Instagram</a><a href="${PALM.osUrl}" data-t="f_signin"></a></div>
       </div>
-      <div class="base"><span>&copy; ${new Date().getFullYear()} Palm Trade</span><span data-t="f_rights"></span></div></footer>`;
+      <div class="base"><span>&copy; ${new Date().getFullYear()} Palm General Suppliers</span><span data-t="f_rights"></span></div></footer>`;
   },
-  marquee(items, cls) { const s = items.map((x) => `<span>${this.esc(x)}</span>`).join(""); return `<div class="marquee ${cls || ""}"><div class="track">${s}${s}</div></div>`; },
+  marquee(items, cls) { const s = items.map((x) => /\.(png|jpg|svg|webp)$/i.test(x) ? `<span class="logo"><img src="${this.esc(x)}" alt="" ></span>` : `<span>${this.esc(x)}</span>`).join(""); const rep = items.length < 6 ? Math.ceil(12 / items.length) : 2; return `<div class="marquee ${cls || ""}"><div class="track">${s.repeat(rep)}</div></div>`; },
   async rest(path, opts) {
     const r = await fetch(`${PALM.supabaseUrl}/rest/v1/${path}`, { ...(opts || {}), headers: { apikey: PALM.supabaseAnonKey, Authorization: `Bearer ${PALM.supabaseAnonKey}`, "Content-Type": "application/json", Prefer: "return=minimal" } });
     if (!r.ok) throw new Error(`${r.status} ${await r.text()}`);
@@ -114,7 +113,7 @@ const Site = {
   async submitLead(f) {
     const pid = crypto.randomUUID();
     const ind = INDUSTRIES.find((x) => x.code === f.industry); const sectors = await this.sectors().catch(() => []);
-    const sec = ind ? sectors.find((s) => s.code === ind.sector) : null;
+    const sec = ind ? sectors.find((s) => s.code === ind.sector[0]) : null;
     await this.rest("parties", { method: "POST", body: JSON.stringify({ id: pid, name_ar: f.company, name_en: f.company, status: "draft", sector: sec ? [sec.code] : [], preferred_language: this.lang, notes: `${ind ? this.i(ind, 0) + " " + this.i(ind, 1) + "\n" : ""}${f.need}\n${f.qty || ""}` }) });
     await this.rest("party_roles", { method: "POST", body: JSON.stringify({ party_id: pid, role: "client" }) });
     await this.rest("contacts", { method: "POST", body: JSON.stringify({ party_id: pid, name: f.name, phone: f.phone, whatsapp: f.phone, email: f.email || null, language: this.lang, is_primary: true }) });

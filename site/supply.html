@@ -1,18 +1,18 @@
 <!doctype html>
 <html lang="en">
 <head>
-<title>We supply | Palm Trade</title>
+<title>We supply | Palm General Suppliers</title>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;700&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="styles.css?v=4" />
+<link rel="stylesheet" href="styles.css?v=7" />
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Crect width=%2732%27 height=%2732%27 rx=%278%27 fill=%27%238a3731%27/%3E%3Ctext x=%2716%27 y=%2722%27 font-size=%2718%27 font-family=%27Arial%27 font-weight=%27700%27 fill=%27white%27 text-anchor=%27middle%27%3EP%3C/text%3E%3C/svg%3E" />
 </head>
 <body>
 <section class="page-head"><div class="tags" id="htags"></div><h1 id="htitle"></h1><p id="hp"></p></section>
 <div id="body"></div>
-<script src="site.js?v=4"></script>
+<script src="site.js?v=7"></script>
 <script>
 window.PAGE = function () {
   let rows = null;
@@ -30,7 +30,7 @@ window.PAGE = function () {
     const chips = '<div class="chips">' + INDUSTRIES.map((x) => '<a class="pill ' + (x.code === c ? "on" : "") + '" href="supply.html?industry=' + x.code + '">' + Site.esc(Site.i(x, 0)) + '</a>').join("") + '</div>';
     const cta = '<div class="sticky-cta"><a class="pill clay" href="quote.html?industry=' + c + '"><span>' + Site.esc(Site.t("nav_quote")) + '</span><svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M8 7h9v9"/></svg></a></div>';
     if (!rows) { body.innerHTML = chips + '<div class="products"><div class="empty">' + Site.esc(Site.t("loading")) + '</div>' + cta + '</div>'; return; }
-    const items = rows.filter((r) => r.sector_code === ind.sector);
+    const items = rows.filter((r) => ind.sector.includes(r.sector_code));
     body.innerHTML = chips + '<div class="products">' + (items.length ? items.map((p) => '<a class="prow" href="quote.html?industry=' + c + '&product=' + encodeURIComponent(p.name_en) + '"><div><div class="mono">' + Site.esc(p.category_id ? Site.pick(p, "category") : Site.pick(p, "sector")) + '</div><h3>' + Site.esc(Site.pick(p, "name")) + '</h3><p>' + Site.esc((Site.pick(p, "description") || "").slice(0, 110)) + '</p></div><span class="unit">' + Site.esc(p.unit) + '</span></a>').join("") : '<div class="empty">' + Site.esc(Site.t("s_none")) + '</div>') + cta + '</div>';
   };
   draw(); document.addEventListener("langchange", draw);

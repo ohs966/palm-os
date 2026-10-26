@@ -1,18 +1,18 @@
 <!doctype html>
 <html lang="en">
 <head>
-<title>Palm Trade | General supply company, Egypt</title>
-<meta name="description" content="Palm Trade supplies uniforms, security, cleaning, textiles, construction and kitchen equipment, ready meals, hotel, housekeeping and buffet products to businesses across Egypt." />
+<title>Palm General Suppliers | Egypt</title>
+<meta name="description" content="Palm General Suppliers supplies uniforms, security, cleaning, textiles, construction and kitchen equipment, ready meals, hotel, housekeeping and buffet products to businesses across Egypt." />
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;700&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="styles.css?v=4" />
+<link rel="stylesheet" href="styles.css?v=7" />
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Crect width=%2732%27 height=%2732%27 rx=%278%27 fill=%27%238a3731%27/%3E%3Ctext x=%2716%27 y=%2722%27 font-size=%2718%27 font-family=%27Arial%27 font-weight=%27700%27 fill=%27white%27 text-anchor=%27middle%27%3EP%3C/text%3E%3C/svg%3E" />
 </head>
 <body class="home">
 <section class="hero" style="background-image:url(img/hero.jpg)">
-  <div><div class="word"><small data-t="hero_tag"></small></div><div id="heronav"></div></div>
+  <div class="tagline" data-t="hero_tag"></div>
   <div>
     <div class="foot"><div class="places" id="places"></div></div>
       </div>
@@ -23,9 +23,8 @@
 <div class="wallet" id="wallet"></div>
 
 <section class="partners">
-  <div class="wrap"><span class="mono" data-t="pt_label"></span><span class="mono" style="opacity:.5" data-t="pt_p"></span></div>
+  <div class="wrap"><span class="mono" data-t="pt_label"></span></div>
   <div id="marq1"></div>
-  <div id="marq2" style="margin-top:14px"></div>
 </section>
 
 <section class="benefits">
@@ -38,15 +37,14 @@
   </div>
 </section>
 
-<script src="site.js?v=4"></script>
+<script src="site.js?v=7"></script>
 <script>
 window.PAGE = function () {
   const draw = () => {
     
-    document.getElementById("places").innerHTML = Site.t("hero_places").split("\n").map(Site.esc).join("<br>");
+    document.getElementById("places").innerHTML = Site.t("hero_places").split("\n").map((c) => "<span>" + Site.esc(c) + "</span>").join("");
     document.getElementById("wallet").innerHTML = INDUSTRIES.map((x, i) => '<a class="wcard ' + x.tint + '" href="supply.html?industry=' + x.code + '" style="top:calc(var(--nav-h) + ' + (8 + i * 6) + 'px)"><div class="tags"><span class="pill">0' + (i + 1) + '</span><span class="pill">' + Site.esc(Site.t("card_tag")) + '</span></div><h3>' + Site.esc(Site.i(x, 0)) + '</h3><div class="sub">' + Site.esc(Site.i(x, 1)) + '</div><div class="act"><span class="pill solid">' + Site.esc(Site.t("see")) + '<svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M8 7h9v9"/></svg></span></div><div class="im" style="background-image:url(' + x.img + ')"></div></a>').join("");
     document.getElementById("marq1").innerHTML = Site.marquee(PALM.partners);
-    document.getElementById("marq2").innerHTML = Site.marquee(INDUSTRIES.map((x) => Site.i(x, 0)), "rev small");
     Site.apply();
   };
   draw(); document.addEventListener("langchange", draw);
