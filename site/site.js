@@ -11,14 +11,14 @@ window.PALM = {
 
 /* The nine industries. `sector` is the Palm OS sector code whose products are listed under the industry. */
 const INDUSTRIES = [
-  { code: "uniforms", sector: ["uniforms"], tint: "t1", color: "#2f5bd6", img: "img/uniforms.jpg", en: ["Uniforms", "& Workwear", "Hotel, medical, school, industrial and security uniforms, branded to your specification."], ar: ["اليونيفورم", "وملابس العمل", "يونيفورم فنادق وطبي ومدارس وصناعي وأمن، بعلامتك ومواصفاتك."] },
-  { code: "hospitality", sector: ["hospitality"], tint: "t8", color: "#c9a24a", img: "img/hotel.jpg", en: ["Hospitality", "& Hotel Supplies", "In-room amenities, bathrobes, slippers, linen and front-of-house products for hotels and resorts."], ar: ["الضيافة", "ومستلزمات الفنادق", "مستلزمات الغرف والأرواب والشباشب والبياضات ومنتجات الاستقبال للفنادق والمنتجعات."] },
-  { code: "housekeeping", sector: ["housekeeping_buffet", "cleaning"], tint: "t2", color: "#19a6c9", img: "img/cleaning.jpg", en: ["Housekeeping", "& Cleaning Supplies", "Chemicals, tools, microfibre, trolleys, dispensers and consumables for facilities of any size."], ar: ["الهاوس كيبينج", "ومستلزمات النظافة", "منظفات وأدوات ومايكروفايبر وعربات وموزعات ومستهلكات لأي منشأة."] },
-  { code: "kitchen", sector: ["kitchen_equipment"], tint: "t5", color: "#e06a1f", img: "img/kitchen.jpg", en: ["Kitchen", "& Buffet Equipment", "Commercial ranges, refrigeration, prep tables, chafing dishes and buffet service ware."], ar: ["المطابخ", "ومعدات البوفيه", "أفران ومعدات تبريد وطاولات تحضير وأواني تقديم وأدوات بوفيه."] },
-  { code: "meals", sector: ["fnb_meals"], tint: "t7", color: "#3aa655", img: "img/meals.jpg", en: ["Ready Meals", "& Catering", "Prepared meals for staff canteens, schools, hospitals and events, delivered daily."], ar: ["الوجبات الجاهزة", "والتموين", "وجبات جاهزة لكافتيريات الموظفين والمدارس والمستشفيات والفعاليات، تُسلَّم يومياً."] },
-  { code: "security", sector: ["security"], tint: "t6", color: "#8e9aa8", img: "img/security.jpg", en: ["Security", "Equipment", "Guard uniforms, radios, access control accessories and site safety gear for security firms."], ar: ["معدات", "الأمن", "يونيفورم حراسة، أجهزة لاسلكي، تحكم في الدخول ومعدات سلامة لشركات الأمن."] },
-  { code: "construction", sector: ["construction"], tint: "t4", color: "#f2b21b", img: "img/construction.jpg", en: ["Construction", "& Site Equipment", "PPE, tools, site consumables and safety signage for contractors and industrial sites."], ar: ["الإنشاءات", "ومعدات المواقع", "معدات وقاية وعدد ومستهلكات مواقع ولافتات سلامة للمقاولين والمنشآت الصناعية."] },
-  { code: "textiles", sector: ["fashion_textiles"], tint: "t3", color: "#d2487e", img: "img/textiles.jpg", en: ["Textiles", "& Fabrics", "Fabrics, trims and finished garments for brands, retailers and workshops."], ar: ["المنسوجات", "والأقمشة", "أقمشة وإكسسوارات وملابس جاهزة للعلامات التجارية والمتاجر والورش."] },
+  { code: "uniforms", sector: ["uniforms"], tint: "t1", color: "#2f5bd6", img: "img/uniforms.jpg?v=9", en: ["Uniforms", "& Workwear", "Hotel, medical, school, industrial and security uniforms, branded to your specification."], ar: ["اليونيفورم", "وملابس العمل", "يونيفورم فنادق وطبي ومدارس وصناعي وأمن، بعلامتك ومواصفاتك."] },
+  { code: "hospitality", sector: ["hospitality"], tint: "t8", color: "#c9a24a", img: "img/hotel.jpg?v=9", en: ["Hospitality", "& Hotel Supplies", "In-room amenities, bathrobes, slippers, linen and front-of-house products for hotels and resorts."], ar: ["الضيافة", "ومستلزمات الفنادق", "مستلزمات الغرف والأرواب والشباشب والبياضات ومنتجات الاستقبال للفنادق والمنتجعات."] },
+  { code: "housekeeping", sector: ["housekeeping_buffet", "cleaning"], tint: "t2", color: "#19a6c9", img: "img/cleaning.jpg?v=9", en: ["Housekeeping", "& Cleaning Supplies", "Chemicals, tools, microfibre, trolleys, dispensers and consumables for facilities of any size."], ar: ["الهاوس كيبينج", "ومستلزمات النظافة", "منظفات وأدوات ومايكروفايبر وعربات وموزعات ومستهلكات لأي منشأة."] },
+  { code: "kitchen", sector: ["kitchen_equipment"], tint: "t5", color: "#e06a1f", img: "img/kitchen.jpg?v=9", en: ["Kitchen", "& Buffet Equipment", "Commercial ranges, refrigeration, prep tables, chafing dishes and buffet service ware."], ar: ["المطابخ", "ومعدات البوفيه", "أفران ومعدات تبريد وطاولات تحضير وأواني تقديم وأدوات بوفيه."] },
+  { code: "meals", sector: ["fnb_meals"], tint: "t7", color: "#3aa655", img: "img/meals.jpg?v=9", en: ["Ready Meals", "& Catering", "Prepared meals for staff canteens, schools, hospitals and events, delivered daily."], ar: ["الوجبات الجاهزة", "والتموين", "وجبات جاهزة لكافتيريات الموظفين والمدارس والمستشفيات والفعاليات، تُسلَّم يومياً."] },
+  { code: "security", sector: ["security"], tint: "t6", color: "#8e9aa8", img: "img/security.jpg?v=9", en: ["Security", "Equipment", "Guard uniforms, radios, access control accessories and site safety gear for security firms."], ar: ["معدات", "الأمن", "يونيفورم حراسة، أجهزة لاسلكي، تحكم في الدخول ومعدات سلامة لشركات الأمن."] },
+  { code: "construction", sector: ["construction"], tint: "t4", color: "#f2b21b", img: "img/construction.jpg?v=9", en: ["Construction", "& Site Equipment", "PPE, tools, site consumables and safety signage for contractors and industrial sites."], ar: ["الإنشاءات", "ومعدات المواقع", "معدات وقاية وعدد ومستهلكات مواقع ولافتات سلامة للمقاولين والمنشآت الصناعية."] },
+  { code: "textiles", sector: ["fashion_textiles"], tint: "t3", color: "#d2487e", img: "img/textiles.jpg?v=9", en: ["Textiles", "& Fabrics", "Fabrics, trims and finished garments for brands, retailers and workshops."], ar: ["المنسوجات", "والأقمشة", "أقمشة وإكسسوارات وملابس جاهزة للعلامات التجارية والمتاجر والورش."] },
 ];
 window.INDUSTRIES = INDUSTRIES;
 
@@ -35,7 +35,7 @@ const DICT = {
     b2t: "48-hour quotation", b2p: "Every variant priced and lead times confirmed within two working days.",
     b3t: "Quality checked", b3p: "Each order is inspected before it leaves the supplier, then tracked to your door.",
     b4t: "Branded to spec", b4p: "Embroidery, printing and labels configured per item and included in the price.",
-    f_nav: "Pages", f_contact: "Contact", f_more: "More", f_signin: "Team sign in", f_rights: "General supply company, Egypt",
+    f_nav: "Pages", f_contact: "Contact", f_more: "More", f_signin: "Team sign in", f_rights: "General Supplies | Procurement | Import & Export",
     s_title: "We Supply", s_p: "Pick an industry to see the products we supply for it, then request a quotation.",
     s_all: "All industries", s_products: "products", s_none: "Products for this industry are being added. Request a quotation and tell us what you need.", s_back: "All industries",
     q_title: "Request Quotation", q_p: "Tell us what you need and we come back with a full quotation within 48 hours.",
@@ -93,13 +93,13 @@ const Site = {
   footer() {
     const wa = PALM.phone.replace(/[^\d]/g, "");
     return `<footer>
-      <div class="word" style="margin-bottom:26px"><img src="img/emblem.png" alt="Palm" style="height:22px"></div>
+      <div class="word fbrand"><img src="img/emblem.png" alt="Palm" /><span>PALM GENERAL SUPPLY</span></div>
       <div class="cols">
         <div><span class="mono" data-t="f_nav"></span><a href="index.html" data-t="nav_home"></a><a href="supply.html" data-t="nav_supply"></a><a href="quote.html#contact" data-t="nav_contact"></a><a href="quote.html" data-t="nav_quote"></a></div>
         <div><span class="mono" data-t="f_contact"></span><a href="tel:${PALM.phone.replace(/\s/g, "")}" dir="ltr">${PALM.phone}</a><a href="https://wa.me/${wa}">WhatsApp</a><a href="mailto:${PALM.email}">${PALM.email}</a></div>
         <div><span class="mono" data-t="f_more"></span><a href="#">LinkedIn</a><a href="#">Instagram</a></div>
       </div>
-      <div class="base"><span>&copy; ${new Date().getFullYear()} Palm General Suppliers</span><span data-t="f_rights"></span></div></footer>`;
+      <div class="base"><span>&copy; ${new Date().getFullYear()} Palm General Supply</span><span data-t="f_rights"></span></div></footer>`;
   },
   marquee(items, cls) { const s = items.map((x) => /\.(png|jpg|svg|webp)$/i.test(x) ? `<span class="logo"><img src="${this.esc(x)}" alt="" ></span>` : `<span>${this.esc(x)}</span>`).join(""); const rep = items.length < 6 ? Math.ceil(12 / items.length) : 2; return `<div class="marquee ${cls || ""}"><div class="track">${s.repeat(rep)}</div></div>`; },
   async rest(path, opts) {

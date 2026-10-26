@@ -296,3 +296,38 @@ body.home footer { border-radius: 0; border-top: 1px solid rgba(255,255,255,.12)
 .wcard.glass::before { background: radial-gradient(70% 70% at 50% 10%, color-mix(in srgb, var(--accent) 70%, transparent) 0%, transparent 72%); opacity: .85; }
 .wcard.glass { border-top: 1px solid color-mix(in srgb, var(--accent) 60%, rgba(255,255,255,.3)); }
 .wcard.glass .im { display: block; }
+
+/* ---------- v9: pure black site, bold glass cards, centred page heads ---------- */
+:root { --black: #000; --dark-2: #0b0b0b; }
+body, body.home { background: #000; color: #fff; }
+.dark-wrap, .partners, footer, .page-head, .hero { background-color: #000; }
+footer { border-radius: 0; border-top: 1px solid rgba(255,255,255,.12); }
+footer .word { display: flex; }
+footer .fbrand { align-items: center; gap: 14px; font-size: 15px; letter-spacing: .08em; font-weight: 700; margin-bottom: 30px; }
+footer .fbrand img { height: 20px; width: auto; }
+.page-head { border-radius: 0; text-align: center; position: relative; padding-bottom: 46px; }
+.page-head .tags { justify-content: center; }
+.page-head p { margin-inline: auto; }
+.page-head::after, .dark-wrap::after { content: ""; display: block; width: 40px; height: 3px; background: #f1ecdf; border-radius: 2px; margin: 0 auto; }
+.page-head::after { position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); }
+.dark-wrap { position: relative; padding-bottom: 3px; }
+/* inner pages on black */
+.ind, .prow, .cat, .pcard, .form input, .form select, .form textarea, .contact-lines a, .chips .pill { background: rgba(255,255,255,.07); color: #fff; border-color: rgba(255,255,255,.16); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); }
+.ind h3, .prow h3, .cat h3 { color: #fff; }
+.ind .n, .prow p, .prow .mono, .prow .unit, .contact-lines a span.mono, .empty, .wallet-head p { color: rgba(255,255,255,.6); }
+.ind .go { background: rgba(255,255,255,.9); color: #111; }
+.ind:hover { border-color: rgba(255,255,255,.6); }
+.chips .pill.on { background: #fff; color: #000; border-color: #fff; }
+.form label { color: #fff; font-weight: 700; font-size: 12px; letter-spacing: .08em; }
+[dir="rtl"] .form label { font-size: 13px; }
+.form input, .form select, .form textarea { color: #fff; }
+.form select option { color: #000; }
+.form input:focus, .form select:focus, .form textarea:focus { border-color: #fff; }
+.form .msg.ok { background: rgba(60,180,100,.18); color: #9fe3b4; } .form .msg.bad { background: rgba(200,60,60,.18); color: #f3a3a3; }
+.sticky-cta .pill { background: rgba(255,255,255,.92); color: #000; border-color: #fff; }
+/* bold colourful glass cards */
+.wcard.glass { background: linear-gradient(180deg, color-mix(in srgb, var(--accent) 38%, rgba(255,255,255,.06)) 0%, color-mix(in srgb, var(--accent) 14%, rgba(255,255,255,.04)) 55%, rgba(255,255,255,.04) 100%); border: 1px solid color-mix(in srgb, var(--accent) 55%, rgba(255,255,255,.35)); box-shadow: 0 -12px 50px color-mix(in srgb, var(--accent) 35%, transparent), 0 1px 0 rgba(255,255,255,.18) inset; }
+.wcard.glass::before { background: radial-gradient(70% 60% at 50% 0%, color-mix(in srgb, var(--accent) 85%, transparent) 0%, transparent 70%); opacity: 1; }
+.wcard.glass .tags .pill { border-color: rgba(255,255,255,.5); }
+.wcard.glass .sub { opacity: .85; }
+.wcard.glass .pill.solid { background: rgba(0,0,0,.55); }
