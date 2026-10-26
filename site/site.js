@@ -25,7 +25,7 @@ window.INDUSTRIES = INDUSTRIES;
 
 const DICT = {
   en: {
-    nav_home: "Home", nav_supply: "We supply", nav_quote: "Request quotation", lang: "AR",
+    nav_home: "Home", nav_supply: "We supply", nav_contact: "Contact", nav_quote: "Request quotation", nav_quote_short: "Quote", lang: "AR",
     hero_tag: "General Supplies | Procurement | Import & Export", hero_call: "Call us", hero_places: "Cairo\nAlexandria\nAll of Egypt", hero_p: "Supplying the uniforms, equipment, meals and consumables that hotels, hospitals, schools, factories and security firms run on. One quotation, one contract, delivered on time.",
     hero_cta: "Request a quotation", hero_cta2: "What we supply",
     w_title: "What we supply", w_p: "Nine industries, one supplier. Slide through the cards and open any industry to see its products.",
@@ -45,7 +45,7 @@ const DICT = {
     c_call: "Call", c_wa: "WhatsApp", c_mail: "Email", loading: "Loading...", unit: "Unit",
   },
   ar: {
-    nav_home: "الرئيسية", nav_supply: "ماذا نورّد", nav_quote: "اطلب عرض سعر", lang: "EN",
+    nav_home: "الرئيسية", nav_supply: "ماذا نورّد", nav_contact: "اتصل بنا", nav_quote: "اطلب عرض سعر", nav_quote_short: "عرض سعر", lang: "EN",
     hero_tag: "توريدات عامة | مشتريات | استيراد وتصدير", hero_call: "اتصل بنا", hero_places: "القاهرة\nالإسكندرية\nكل مصر", hero_p: "نورّد اليونيفورم والمعدات والوجبات والمستهلكات التي تعمل بها الفنادق والمستشفيات والمدارس والمصانع وشركات الأمن. عرض سعر واحد، عقد واحد، تسليم في الموعد.",
     hero_cta: "اطلب عرض سعر", hero_cta2: "ماذا نورّد",
     w_title: "ماذا نورّد", w_p: "تسعة قطاعات، مورّد واحد. مرّر البطاقات وافتح أي قطاع لترى منتجاته.",
@@ -84,17 +84,19 @@ const Site = {
   header() {
     const on = (f) => (this.page() === f ? "on" : "");
     return `<div class="header" id="hdr"><nav class="navpill">
+      <a href="index.html" class="brand"><img src="img/emblem.png" alt="" /><span class="t">palm</span></a>
       <a href="index.html" class="${on("index.html")}" data-t="nav_home"></a>
       <a href="supply.html" class="${on("supply.html")}" data-t="nav_supply"></a>
-      <a href="quote.html" class="cta ${on("quote.html")}" data-t="nav_quote"></a>
-      <button class="lang" data-lang-toggle data-t="lang"></button></nav></div>`;
+      <a href="quote.html#contact" data-t="nav_contact"></a>
+      <button class="lang" data-lang-toggle data-t="lang"></button>
+      <a href="quote.html" class="cta"><span class="long" data-t="nav_quote"></span><span class="short" data-t="nav_quote_short"></span></a></nav></div>`;
   },
   footer() {
     const wa = PALM.phone.replace(/[^\d]/g, "");
     return `<footer>
-      <div class="word"></div>
+      <div class="word" style="display:flex;align-items:center;gap:10px;font-size:28px;margin-bottom:26px"><img src="img/emblem.png" alt="" style="height:16px">palm</div>
       <div class="cols">
-        <div><span class="mono" data-t="f_nav"></span><a href="index.html" data-t="nav_home"></a><a href="supply.html" data-t="nav_supply"></a><a href="quote.html" data-t="nav_quote"></a></div>
+        <div><span class="mono" data-t="f_nav"></span><a href="index.html" data-t="nav_home"></a><a href="supply.html" data-t="nav_supply"></a><a href="quote.html#contact" data-t="nav_contact"></a><a href="quote.html" data-t="nav_quote"></a></div>
         <div><span class="mono" data-t="f_contact"></span><a href="tel:${PALM.phone.replace(/\s/g, "")}" dir="ltr">${PALM.phone}</a><a href="https://wa.me/${wa}">WhatsApp</a><a href="mailto:${PALM.email}">${PALM.email}</a></div>
         <div><span class="mono" data-t="f_more"></span><a href="#">LinkedIn</a><a href="#">Instagram</a><a href="${PALM.osUrl}" data-t="f_signin"></a></div>
       </div>
