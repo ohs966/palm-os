@@ -349,3 +349,16 @@ footer .fbrand img { height: 20px; width: auto; }
 @media (min-width: 760px) { .wcard.glass .im { height: 520px; } .wcard.glass { min-height: 0; } }
 .ind h3 { font-size: 18px; }
 @media (min-width: 760px) { .ind h3 { font-size: 22px; } }
+
+/* v11: crisp hero drawn in HTML instead of a stretched picture */
+.hero { background-image: none; background: #000; }
+.hero::before { display: none; }
+.hero-brand { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); display: flex; flex-direction: column; align-items: center; gap: 10px; width: max-content; }
+.hero-brand img { width: 190px; height: auto; }
+.hero-brand span { font-family: "Courier New", "Space Mono", monospace; font-weight: 700; font-size: 13px; letter-spacing: .06em; color: #fff; white-space: nowrap; }
+@media (min-width: 760px) { .hero-brand img { width: 300px; } .hero-brand span { font-size: 19px; } }
+@media (min-width: 1300px) { .hero-brand img { width: 360px; } .hero-brand span { font-size: 22px; } }
+/* v11: active nav item is a white button */
+.navpill a.on { background: rgba(255,255,255,.95); color: #000; border-color: #fff; box-shadow: 0 1px 0 #fff inset, 0 6px 18px rgba(0,0,0,.25); }
+.navpill a.on::before { display: none; }
+.navpill a:active, .navpill a:hover { background: rgba(255,255,255,.95); color: #000; }
