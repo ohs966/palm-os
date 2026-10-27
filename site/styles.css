@@ -372,3 +372,14 @@ footer .fbrand img { height: 20px; width: auto; }
 .hero-brand { left: 50%; top: 50%; transform: translate(-50%, -50%); width: auto; text-align: center; }
 .hero-brand img { width: 200px; }
 @media (min-width: 760px) { .hero-brand img { width: 475px; } }
+
+/* v14: hero lockup split so the name can switch language in the same place */
+.hero-brand { --lw: 200px; width: var(--lw); display: block; }
+@media (min-width: 760px) { .hero-brand { --lw: 475px; } }
+.hero-brand img { width: 100%; height: auto; }
+.hero-brand .lk-top { display: block; width: var(--lw); }
+.hero-brand .lk-text { display: block; width: var(--lw); margin-top: calc(var(--lw) * 29 / 475); height: calc(var(--lw) * 37 / 475); }
+.hero-brand .lk-text.en { object-fit: contain; }
+.hero-brand .lk-text.ar { display: none; font-family: "Reem Kufi", "IBM Plex Sans Arabic", sans-serif; font-weight: 700; color: #fff; font-size: calc(var(--lw) * 34 / 475); line-height: calc(var(--lw) * 37 / 475); text-align: center; letter-spacing: 0; white-space: nowrap; }
+[dir="rtl"] .hero-brand .lk-text.en { display: none; }
+[dir="rtl"] .hero-brand .lk-text.ar { display: block; }
