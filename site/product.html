@@ -1,54 +1,53 @@
 <!doctype html>
 <html lang="en">
 <head>
+<title>Product | Palm General Supply</title>
 <meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Product | Palm Trade</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="styles.css" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="styles.css?v=15" />
+<link rel="icon" href="img/emblem.png" />
 </head>
 <body>
-<div class="wrap">
-  <div class="page">
-    <div class="top">
-      <a class="brand" href="index.html"><span class="mark">P</span>Palm Trade</a>
-      <nav class="nav">
-        <a href="index.html" data-t="nav_home">Home</a>
-        <a class="on" href="collections.html" data-t="nav_collections">Collections</a>
-        <a href="index.html#about" data-t="nav_about">About</a>
-        <a href="index.html#contact" data-t="nav_contact">Contact</a>
-      </nav>
-      <div class="icons"><button class="ibtn" data-lang-toggle><span data-t="lang" style="font-size:11px;font-weight:600">العربية</span></button></div>
-    </div>
-    <div class="crumbs" id="crumbs"><a href="index.html" data-t="nav_home">Home</a> / <a href="collections.html" data-t="nav_collections">Collections</a></div>
-    <div id="body"><div class="empty" data-t="loading">Loading...</div></div>
-  </div>
-  <footer><span data-t="footer">Palm Trade. General supply company, Egypt.</span></footer>
-</div>
-<script src="site.js"></script>
+<div id="body" class="pdp-wrap"><div class="empty" style="padding:140px 20px">...</div></div>
+<script src="site.js?v=15"></script>
 <script>
-let p = null;
-function esc(s) { return String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c])); }
-function render() {
-  if (!p) return;
-  document.title = `${Site.pick(p, "name")} | Palm Trade`;
-  const img = Site.productImage(p);
-  document.getElementById("body").innerHTML = `
-    <div class="product">
-      <div class="pic" style="background-image:url('${esc(img || "hero.jpg")}')"></div>
-      <div>
-        <div class="meta">${esc(Site.pick(p, "sector"))}${p.category_id ? " / " + esc(Site.pick(p, "category")) : ""}</div>
-        <h1>${esc(Site.pick(p, "name"))}</h1>
-        <div class="meta">${esc(Site.t("unit"))}: ${esc(p.unit)}</div>
-        <div class="desc">${esc(Site.pick(p, "description"))}</div>
-        <p style="margin-top:26px"><a class="cta" href="${esc(Site.quoteLink(p))}"><span>${esc(Site.t("product_cta"))}</span><span class="arr"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M8 7h9v9"/></svg></span></a></p>
-        <p><a class="link2" href="collections.html">${esc(Site.t("back"))}</a></p>
-      </div>
-    </div>`;
-}
-document.addEventListener("langchange", render);
-const id = new URLSearchParams(location.search).get("id");
-Site.product(id).then((r) => { p = r; if (!p) throw new Error("not found"); render(); }).catch((e) => { document.getElementById("body").innerHTML = `<div class="empty">${esc(Site.t("error"))}<br><small>${esc(e.message)}</small></div>`; });
+window.PAGE = function () {
+  const id = new URLSearchParams(location.search).get("id");
+  let p = null, attrs = [], sel = {}, qty = 100, img = 0, failed = false;
+  const body = document.getElementById("body");
+  const selection = () => attrs.map((a) => { const o = a.options.find((x) => x.option_id === sel[a.id]); return o ? Site.pick(a.row, "attribute") + ": " + Site.pick(o, "option") : ""; }).filter(Boolean);
+  const draw = () => {
+    if (failed || (p === undefined)) { body.innerHTML = '<div class="empty" style="padding:140px 20px">' + Site.esc(Site.t("sh_nf")) + '</div>'; return; }
+    if (!p) return;
+    const ind = Site.industryOf(p.sector_code); const imgs = (p.images && p.images.length) ? p.images : [ind.img];
+    const name = Site.pick(p, "name"); document.title = name + " | Palm General Supply";
+    const text = name + (selection().length ? " (" + selection().join(", ") + ")" : "");
+    const wa = PALM.phone.replace(/[^\d]/g, "");
+    body.innerHTML = '<div class="pdp" style="--accent:' + ind.color + '">' +
+      '<div class="gal"><div class="main ' + ((p.images && p.images.length) ? "" : "fallback") + '" style="background-image:url(\'' + Site.esc(imgs[img] || imgs[0]) + '\')"></div>' +
+      (imgs.length > 1 ? '<div class="thumbs">' + imgs.map((u, i) => '<button data-img="' + i + '" class="' + (i === img ? "on" : "") + '" style="background-image:url(\'' + Site.esc(u) + '\')" aria-label="' + (i + 1) + '"></button>').join("") + '</div>' : '') + '</div>' +
+      '<div class="info"><div class="crumbs"><a class="pill" href="supply.html?industry=' + ind.code + '">' + Site.esc(Site.i(ind, 0)) + '</a>' + (p.category_id ? '<span class="mono">' + Site.esc(Site.pick(p, "category")) + '</span>' : '') + '</div>' +
+      '<h1>' + Site.esc(name) + '</h1>' +
+      (p.from_price ? '<div class="price"><span>' + Site.t("sh_from") + '</span> ' + Site.money(p.from_price) + ' <small>/ ' + Site.esc(p.unit) + '</small></div>' : '') +
+      '<p class="desc">' + Site.esc(Site.pick(p, "description")) + '</p>' +
+      attrs.map((a) => '<div class="attr"><div class="mono">' + Site.esc(Site.pick(a.row, "attribute")) + '</div><div class="opts">' + a.options.map((o) => '<button data-a="' + a.id + '" data-o="' + o.option_id + '" class="opt ' + (sel[a.id] === o.option_id ? "on" : "") + '">' + (o.color_hex ? '<i style="background:' + Site.esc(o.color_hex) + '"></i>' : '') + Site.esc(Site.pick(o, "option")) + '</button>').join("") + '</div></div>').join("") +
+      '<div class="attr"><div class="mono">' + Site.t("sh_qty") + '</div><div class="qty"><button data-q="-1" aria-label="-">−</button><input id="qty" type="number" min="1" value="' + qty + '" dir="ltr"><button data-q="1" aria-label="+">+</button></div></div>' +
+      '<div class="cta"><a class="pill white big" href="quote.html?industry=' + ind.code + '&product=' + encodeURIComponent(text) + '&qty=' + qty + '">' + Site.t("sh_req") + ' <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M8 7h9v9"/></svg></a>' +
+      '<a class="pill wa big" href="https://wa.me/' + wa + '?text=' + encodeURIComponent(Site.t("sh_waText") + "\n" + text + "\n" + Site.t("sh_qty") + ": " + qty) + '">' + Site.t("sh_wa") + '</a></div>' +
+      '<div class="note">' + Site.t("sh_note") + '</div></div></div>';
+    body.querySelectorAll("[data-img]").forEach((b) => b.onclick = () => { img = +b.dataset.img; draw(); });
+    body.querySelectorAll("[data-o]").forEach((b) => b.onclick = () => { sel[b.dataset.a] = b.dataset.o; draw(); });
+    body.querySelectorAll("[data-q]").forEach((b) => b.onclick = () => { qty = Math.max(1, qty + (+b.dataset.q) * (qty >= 100 ? 50 : 10)); draw(); });
+    const qi = body.querySelector("#qty"); qi.onchange = () => { qty = Math.max(1, parseInt(qi.value || "1", 10)); draw(); };
+  };
+  document.addEventListener("langchange", draw);
+  if (!id) { p = undefined; draw(); return; }
+  Promise.all([Site.rest("public_catalogue?select=*&id=eq." + encodeURIComponent(id)), Site.options([id]).catch(() => [])]).then(([r, o]) => {
+    p = r[0]; attrs = Site.groupOptions(o, id); attrs.forEach((a) => { sel[a.id] = a.options[0].option_id; }); draw();
+  }).catch(() => { failed = true; draw(); });
+};
 </script>
 </body>
 </html>

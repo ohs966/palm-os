@@ -27,6 +27,7 @@ const DICT = {
     nav_home: "Home", nav_supply: "We Supply", nav_contact: "Contact", nav_quote: "Request Quotation", nav_quote_short: "Quote", lang: "AR",
     hero_tag: "General Supplies | Procurement | Import & Export", hero_call: "Call us", hero_places: "Cairo\nAlexandria\nGiza\nPort Said\nSuez\nIsmailia\nMansoura\nTanta\nZagazig\nAsyut\nLuxor\nAswan\nHurghada\nSharm El Sheikh\nAll of Egypt", hero_p: "Supplying the uniforms, equipment, meals and consumables that hotels, hospitals, schools, factories and security firms run on. One quotation, one contract, delivered on time.",
     hero_cta: "Request a quotation", hero_cta2: "What we supply",
+    sh_from: "From", sh_view: "View product", sh_req: "Request quotation", sh_wa: "WhatsApp", sh_qty: "Quantity", sh_opts: "options", sh_note: "Final price depends on quantity, options and branding.", sh_nf: "This product is not available.", sh_feat: "Featured products", sh_all: "See all", sh_choose: "Your selection", sh_waText: "Hello Palm, I would like a quotation for:",
     w_title: "What we supply", w_p: "Eight industries, one supplier. Slide through the cards and open any industry to see its products.",
     see: "See Products", wa: "WhatsApp Us", card_tag: "Industry",
     pt_label: "Clients and Partners", pt_p: "Sectors and partners we work with",
@@ -52,6 +53,7 @@ const DICT = {
     pt_label: "عملاء وشركاء", pt_p: "قطاعات وشركاء نعمل معهم",
     b_title: "لماذا تشتري الشركات عبر بالم",
     b1t: "عقد واحد", b1p: "أي مزيج من الفئات تحت عرض سعر وعقد وفاتورة واحدة.",
+    sh_from: "يبدأ من", sh_view: "عرض المنتج", sh_req: "اطلب عرض سعر", sh_wa: "واتساب", sh_qty: "الكمية", sh_opts: "خيارات", sh_note: "السعر النهائي يعتمد على الكمية والخيارات والشعار.", sh_nf: "هذا المنتج غير متاح.", sh_feat: "منتجات مميزة", sh_all: "عرض الكل", sh_choose: "اختيارك", sh_waText: "مرحبا بالم، أريد عرض سعر لـ:",
     b2t: "عرض سعر خلال 48 ساعة", b2p: "كل خيار مسعّر ومدد التوريد مؤكدة خلال يومي عمل.",
     b3t: "فحص جودة", b3p: "كل طلب يُفحص قبل مغادرة المورد ثم يُتابع حتى بابك.",
     b4t: "بعلامتك التجارية", b4p: "التطريز والطباعة والليبل تُحدد لكل صنف وتُضمَّن في السعر.",
@@ -85,7 +87,7 @@ const Site = {
     return `<div class="header" id="hdr"><nav class="navpill">
       <a href="index.html" class="brand"><img src="img/emblem.png" alt="Palm" /></a>
       <a href="index.html" class="${on("index.html")}" data-t="nav_home"></a>
-      <a href="supply.html" class="${on("supply.html")}" data-t="nav_supply"></a>
+      <a href="supply.html" class="${on("supply.html") || on("product.html")}" data-t="nav_supply"></a>
       <a href="quote.html" class="${on("quote.html")}"><span class="long" data-t="nav_quote"></span><span class="short" data-t="nav_quote_short"></span></a>
       <span class="sep"></span>
       <button class="lang" data-lang-toggle data-t="lang"></button></nav></div>`;
@@ -108,6 +110,28 @@ const Site = {
     const txt = await r.text(); return txt ? JSON.parse(txt) : null;
   },
   catalogue() { return this.rest("public_catalogue?select=*&order=sector_sort,category_sort,name_en"); },
+  options(ids) { return this.rest("public_product_options?select=*&order=attribute_sort,option_sort" + (ids ? "&product_id=in.(" + ids.join(",") + ")" : "")); },
+  industryOf(sectorCode) { return INDUSTRIES.find((x) => x.sector.includes(sectorCode)) || INDUSTRIES[0]; },
+  money(n) { return new Intl.NumberFormat(this.lang === "ar" ? "ar-EG" : "en-US", { maximumFractionDigits: 0 }).format(n) + (this.lang === "ar" ? " ج.م" : " EGP"); },
+  /** Groups option rows into attributes: [{ id, name, options:[{id,name,hex}] }] */
+  groupOptions(rows, pid) {
+    const m = new Map(); rows.filter((r) => r.product_id === pid).forEach((r) => { if (!m.has(r.attribute_id)) m.set(r.attribute_id, { id: r.attribute_id, row: r, options: [] }); m.get(r.attribute_id).options.push(r); });
+    return [...m.values()];
+  },
+  /** E-commerce product card used on We Supply and the homepage. */
+  card(p, opts) {
+    const ind = this.industryOf(p.sector_code); const img = (p.images && p.images[0]) || ind.img; const attrs = this.groupOptions(opts || [], p.id);
+    const colours = attrs.flatMap((a) => a.options.filter((o) => o.color_hex)).slice(0, 6);
+    const summary = attrs.filter((a) => !a.options.some((o) => o.color_hex)).map((a) => this.pick(a.row, "attribute") + ": " + a.options.length).slice(0, 2).join(" · ");
+    const wa = PALM.phone.replace(/[^\d]/g, "");
+    return `<div class="scard" style="--accent:${ind.color}"><a class="sim ${p.images && p.images[0] ? "" : "fallback"}" href="product.html?id=${p.id}" style="background-image:url('${this.esc(img)}')"></a>
+      <div class="sbody"><div class="mono">${this.esc(p.category_id ? this.pick(p, "category") : this.pick(p, "sector"))}</div>
+      <a href="product.html?id=${p.id}"><h3>${this.esc(this.pick(p, "name"))}</h3></a>
+      ${colours.length ? `<div class="sw">${colours.map((o) => `<i style="background:${this.esc(o.color_hex)}" title="${this.esc(this.pick(o, "option"))}"></i>`).join("")}</div>` : ""}
+      ${summary ? `<div class="sum">${this.esc(summary)}</div>` : ""}
+      <div class="sfoot">${p.from_price ? `<div class="price"><span>${this.t("sh_from")}</span> ${this.money(p.from_price)}</div>` : `<div class="price muted">${this.esc(p.unit || "")}</div>`}
+      <div class="sbtn"><a class="pill white" href="product.html?id=${p.id}">${this.t("sh_view")}</a><a class="pill wa" aria-label="WhatsApp" href="https://wa.me/${wa}?text=${encodeURIComponent(this.t("sh_waText") + " " + this.pick(p, "name"))}"><svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm5.3 14.1c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .2-3.3-.7-2.8-1.1-4.5-3.9-4.7-4.1-.1-.2-1.1-1.5-1.1-2.9s.7-2 1-2.3c.2-.3.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.8 2c.1.2.1.4 0 .5l-.3.5-.4.4c-.1.1-.3.3-.1.6.1.3.6 1 1.3 1.6.9.8 1.6 1 1.9 1.2.2.1.4.1.5-.1l.7-.9c.2-.2.4-.2.6-.1l1.9.9c.3.1.5.2.5.3.1.2.1.7-.1 1.3z"/></svg></a></div></div></div></div>`;
+  },
   sectors() { return this.rest("sectors?select=id,code,name_ar,name_en&order=sort_order"); },
   /** Files a quotation request as a draft party + contact + lead, the same records the Palm OS intake form creates. */
   async submitLead(f) {
@@ -127,7 +151,7 @@ const Site = {
         <div class="g2"><label><span data-t="fm_email"></span><input name="email" type="email" dir="ltr"></label>
         <label><span data-t="fm_industry"></span><select name="industry"><option value="">${this.t("fm_pick")}</option>${INDUSTRIES.map((x) => `<option value="${x.code}" ${preset && preset.industry === x.code ? "selected" : ""}>${this.esc(this.i(x, 0) + " " + this.i(x, 1))}</option>`).join("")}</select></label></div>
         <label><span data-t="fm_need"></span><textarea name="need" required>${this.esc((preset && preset.need) || "")}</textarea></label>
-        <label><span data-t="fm_qty"></span><input name="qty"></label>
+        <label><span data-t="fm_qty"></span><input name="qty" value="${this.esc((preset && preset.qty) || "")}"></label>
         <button class="pill clay" type="submit"><span data-t="fm_send"></span>${ARROW}</button>
         <div id="formmsg" class="msg" style="display:none"></div></form>`;
       this.apply();
