@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+<title>Catalogue | Palm General Supply</title>
+<meta name="description" content="Browse the Palm General Supply catalogue by department and category, filter by specification and add products to your quote list." />
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&family=IBM+Plex+Sans+Arabic:wght@400;500;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="styles.css?v=16" />
+<link rel="icon" href="img/emblem-dark.png" />
+<script src="icons.js?v=16"></script>
+<script src="site.js?v=16"></script>
+</head>
+<body>
+
+<main id="main" class="wrap cat-page">
+  <div id="crumbs"></div>
+  <div class="cat-head"><div><h1 id="title" data-t="all_products"></h1><p id="blurb" class="muted"></p></div></div>
+  <div id="subcats"></div>
+  <div class="cat-layout">
+    <aside class="side" id="side" aria-label="Filters"></aside>
+    <section class="results"><div class="res-bar"><button class="btn sm ghost only-m" id="openf"> <span data-t="filters"></span></button><span id="count" class="muted"></span><div class="res-tools"><label class="muted"><span data-t="sort"></span> <select id="sort"><option value="name" data-t="sort_name"></option><option value="opts" data-t="sort_options"></option></select></label><div class="seg" role="group"><button id="vgrid" class="on" data-t="grid"></button><button id="vlist" data-t="list"></button></div></div></div>
+    <div id="grid" class="pgrid"><div class="empty" data-t="loading"></div></div></section>
+  </div>
+</main>
+<script>
+window.PAGE = async function () {
+  const st = { d: Site.q("d") || "", c: Site.q("c") || "", q: Site.q("q") || "", within: "", f: {}, sort: "name", view: "grid" };
+  let deps = [], rows = [];
+  try { [deps, rows] = await Promise.all([Site.departments(), Site.catalogue()]); } catch (e) { document.getElementById("grid").innerHTML = '<div class="empty">' + Site.esc(e.message) + '</div>'; return; }
+  const norm = (s) => String(s || "").toLowerCase();
+  const sv = (s) => (Site.lang === "ar" ? s.v_ar : s.v_en); const sk = (s) => (Site.lang === "ar" ? s.k_ar : s.k_en);
+  const base = () => rows.filter((p) => (!st.d || p.sector_code === st.d) && (!st.c || p.category_id === st.c) && (!st.q || norm([p.name_en, p.name_ar, p.description_en, p.description_ar, p.category_en, p.category_ar, p.sector_en, (p.specs || []).map((s) => s.v_en + " " + s.v_ar).join(" ")].join(" ")).includes(norm(st.q))));
+  const filtered = () => base().filter((p) => (!st.within || norm(p.name_en + " " + p.name_ar).includes(norm(st.within))) && Object.entries(st.f).every(([k, vals]) => !vals.length || (p.specs || []).some((s) => s.k_en === k && vals.includes(s.v_en))));
+  const facets = (list) => { const m = new Map(); list.forEach((p) => (p.specs || []).forEach((s) => { if (!m.has(s.k_en)) m.set(s.k_en, { k: s, vals: new Map() }); const f = m.get(s.k_en); f.vals.set(s.v_en, { s, n: (f.vals.get(s.v_en) || { n: 0 }).n + 1 }); })); return [...m.values()].filter((f) => f.vals.size > 1).sort((a, b) => b.vals.size - a.vals.size).slice(0, 6); };
+  const draw = () => {
+    const dep = deps.find((x) => x.code === st.d); const cat = dep && (dep.categories || []).find((x) => x.id === st.c);
+    const cr = [{ label: Site.t("all_products"), href: "catalog.html" }]; if (dep) cr.push({ label: Site.pick(dep, "name"), href: cat ? "catalog.html?d=" + dep.code : null }); if (cat) cr.push({ label: Site.pick(cat, "name") }); if (st.q) cr.push({ label: "\u201c" + st.q + "\u201d" });
+    document.getElementById("crumbs").innerHTML = Site.crumbs(cr);
+    document.getElementById("title").textContent = cat ? Site.pick(cat, "name") : dep ? Site.pick(dep, "name") : st.q ? "\u201c" + st.q + "\u201d" : Site.t("all_products");
+    document.getElementById("blurb").textContent = dep && !cat ? Site.pick(dep, "blurb") : "";
+    document.title = document.getElementById("title").textContent + " | Palm General Supply";
+    const sub = dep && !cat && !st.q ? (dep.categories || []) : (!dep && !st.q ? deps.map((d) => ({ dep: d })) : []);
+    document.getElementById("subcats").innerHTML = sub.length ? '<div class="subtiles">' + sub.map((c) => c.dep ? '<a class="stile" href="catalog.html?d=' + c.dep.code + '">' + icon(c.dep.icon, 40) + '<span>' + Site.esc(Site.pick(c.dep, "name")) + '</span></a>' : '<a class="stile" href="catalog.html?d=' + dep.code + '&c=' + c.id + '">' + icon(c.icon || dep.icon, 40) + '<span>' + Site.esc(Site.pick(c, "name")) + '</span><small>' + Site.num(c.count) + '</small></a>').join("") + '</div>' : "";
+    const b = base(); const list = filtered(); const fs = facets(b);
+    const tree = dep ? '<div class="fbox"><h3 data-t="categories">' + Site.t("categories") + '</h3><ul class="tree"><li><a href="catalog.html?d=' + dep.code + '" class="' + (!st.c ? "on" : "") + '">' + Site.esc(Site.pick(dep, "name")) + ' <span>' + Site.num(dep.product_count) + '</span></a></li>' + (dep.categories || []).map((c) => '<li class="sub"><a href="catalog.html?d=' + dep.code + '&c=' + c.id + '" class="' + (st.c === c.id ? "on" : "") + '">' + Site.esc(Site.pick(c, "name")) + ' <span>' + Site.num(c.count) + '</span></a></li>').join("") + '</ul></div>'
+      : '<div class="fbox"><h3>' + Site.t("departments") + '</h3><ul class="tree">' + deps.filter((d) => d.product_count).map((d) => '<li><a href="catalog.html?d=' + d.code + (st.q ? "&q=" + encodeURIComponent(st.q) : "") + '">' + Site.esc(Site.pick(d, "name")) + ' <span>' + Site.num(d.product_count) + '</span></a></li>').join("") + '</ul></div>';
+    document.getElementById("side").innerHTML = '<div class="side-head"><h2>' + Site.t("filters") + '</h2><button class="btn sm ghost only-m" id="closef">\u2715</button></div>' +
+      '<div class="fbox"><label for="within" class="fh">' + Site.t("search_within") + '</label><input id="within" type="search" value="' + Site.esc(st.within) + '" /></div>' + tree +
+      fs.map((f) => '<div class="fbox"><h3>' + Site.esc(sk(f.k)) + '</h3><ul class="checks">' + [...f.vals.values()].sort((a, b) => b.n - a.n).slice(0, 10).map((v) => '<li><label><input type="checkbox" data-fk="' + Site.esc(f.k.k_en) + '" value="' + Site.esc(v.s.v_en) + '" ' + ((st.f[f.k.k_en] || []).includes(v.s.v_en) ? "checked" : "") + ' /> <span>' + Site.esc(sv(v.s)) + '</span> <small>' + v.n + '</small></label></li>').join("") + '</ul></div>').join("") +
+      (Object.values(st.f).some((v) => v.length) || st.within ? '<button class="btn sm ghost" id="clearf">' + Site.t("clear") + '</button>' : "");
+    const sorted = list.slice().sort((a, b) => st.sort === "opts" ? (b.specs || []).length - (a.specs || []).length : Site.pick(a, "name").localeCompare(Site.pick(b, "name")));
+    document.getElementById("count").textContent = Site.num(sorted.length) + " " + Site.t("results");
+    const g = document.getElementById("grid"); g.className = st.view === "list" ? "plist" : "pgrid";
+    g.innerHTML = sorted.length ? sorted.map((p) => Site.card(p, deps, st.view)).join("") : '<div class="empty">' + Site.t("no_results") + ' <a href="quote.html#other">' + Site.t("tell_us") + '</a></div>';
+    Site.bindAdd(g, rows);
+    const w = document.getElementById("within"); w.oninput = () => { st.within = w.value; const pos = w.selectionStart; draw(); const n = document.getElementById("within"); n.focus(); n.setSelectionRange(pos, pos); };
+    document.querySelectorAll("[data-fk]").forEach((c) => c.onchange = () => { const k = c.dataset.fk; st.f[k] = st.f[k] || []; st.f[k] = c.checked ? st.f[k].concat(c.value) : st.f[k].filter((x) => x !== c.value); draw(); });
+    const cl = document.getElementById("clearf"); if (cl) cl.onclick = () => { st.f = {}; st.within = ""; draw(); };
+    const cf = document.getElementById("closef"); if (cf) cf.onclick = () => document.body.classList.remove("filters-open");
+  };
+  document.getElementById("sort").onchange = (e) => { st.sort = e.target.value; draw(); };
+  document.getElementById("vgrid").onclick = () => { st.view = "grid"; document.getElementById("vgrid").classList.add("on"); document.getElementById("vlist").classList.remove("on"); draw(); };
+  document.getElementById("vlist").onclick = () => { st.view = "list"; document.getElementById("vlist").classList.add("on"); document.getElementById("vgrid").classList.remove("on"); draw(); };
+  document.getElementById("openf").onclick = () => document.body.classList.add("filters-open");
+  draw(); document.addEventListener("langchange", draw);
+};
+</script>
+</body>
+</html>

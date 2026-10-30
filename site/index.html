@@ -1,50 +1,39 @@
 <!doctype html>
 <html lang="en">
 <head>
-<title>Palm General Supply | Egypt</title>
-<meta name="description" content="Palm General Supply supplies uniforms, security, cleaning, textiles, construction and kitchen equipment, ready meals, hotel, housekeeping and buffet products to businesses across Egypt." />
+<title>Palm General Supply | Industrial and business supplies in Egypt</title>
+<meta name="description" content="Fasteners, safety and PPE, cleaning, electrical, lighting, tools, uniforms and hotel supplies. Build a list and get a full quotation within 24 hours, anywhere in Egypt." />
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;700&family=Reem+Kufi:wght@700&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="styles.css?v=15" />
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Crect width=%2732%27 height=%2732%27 rx=%278%27 fill=%27%238a3731%27/%3E%3Ctext x=%2716%27 y=%2722%27 font-size=%2718%27 font-family=%27Arial%27 font-weight=%27700%27 fill=%27white%27 text-anchor=%27middle%27%3EP%3C/text%3E%3C/svg%3E" />
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&family=IBM+Plex+Sans+Arabic:wght@400;500;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="styles.css?v=16" />
+<link rel="icon" href="img/emblem-dark.png" />
+<script src="icons.js?v=16"></script>
+<script src="site.js?v=16"></script>
 </head>
-<body class="home">
-<section class="hero">
-  <div class="hero-brand"><img class="lk-top" src="img/lockup-top.png?v=14" alt="Palm General Supply" /><img class="lk-text en" src="img/lockup-text.png?v=14" alt="" /><div class="lk-text ar">بالم للتوريدات العامة</div></div>
-  <div class="tagline" data-t="hero_tag"></div>
-  <div>
-    <div class="foot"><div class="places" id="places"></div></div>
-      </div>
-  <div class="scroll"></div>
-</section>
+<body>
 
-<div class="dark-wrap"><div class="wallet-head"><h2 data-t="w_title"></h2><p data-t="w_p"></p></div>
-<div class="wallet" id="wallet"></div></div>
-
-<section class="feat" id="feat" hidden></section>
-
-<section class="partners">
-  <div class="wrap"><span class="mono" data-t="pt_label"></span></div>
-  <div id="marq1"></div>
-</section>
-
-
-<script src="site.js?v=15"></script>
+<main id="main">
+  <section class="hero"><div class="wrap hero-in">
+    <div class="hero-copy"><h1 data-t="hero_t"></h1><p data-t="hero_p"></p>
+      <form class="hero-search" action="catalog.html"><input name="q" type="search" data-t-ph="search_ph" aria-label="Search" /><button class="btn light" type="submit" data-t="search_btn"></button></form></div>
+    <dl class="hero-kpis" id="kpis"></dl>
+  </div></section>
+  <section class="wrap sec"><div class="sec-head"><h2 data-t="shop_by"></h2><a href="catalog.html" class="more"><span data-t="shop_all"></span> ›</a></div><div class="tiles" id="tiles"><div class="empty" data-t="loading"></div></div></section>
+  <section class="how"><div class="wrap"><h2 data-t="how_t"></h2><ol class="steps"><li><b data-t="how1t"></b><span data-t="how1p"></span></li><li><b data-t="how2t"></b><span data-t="how2p"></span></li><li><b data-t="how3t"></b><span data-t="how3p"></span></li></ol></div></section>
+  <section class="sec partners"><div class="wrap"><h2 data-t="partners"></h2><div class="plogos" id="plogos"></div></div></section>
+</main>
 <script>
-window.PAGE = function () {
+window.PAGE = async function () {
+  document.getElementById("plogos").innerHTML = PALM.partners.map((p) => '<img src="' + p + '" alt="" loading="lazy" />').join("");
+  let deps = []; try { deps = await Site.departments(); } catch (e) {}
   const draw = () => {
-    
-    document.getElementById("places").innerHTML = Site.t("hero_places").split("\n").map((c) => "<span>" + Site.esc(c) + "</span>").join("");
-    document.getElementById("wallet").innerHTML = INDUSTRIES.map((x, i) => '<div class="wcard glass" style="--accent:' + x.color + ';top:calc(var(--nav-h) + ' + (8 + i * 6) + 'px)"><div class="tags"><span class="pill">0' + (i + 1) + '</span><span class="pill">' + Site.esc(Site.t("card_tag")) + '</span></div><h3>' + Site.esc(Site.i(x, 0)) + '</h3><div class="sub">' + Site.esc(Site.i(x, 1)) + '</div><div class="act"><a class="pill solid" href="supply.html?industry=' + x.code + '">' + Site.esc(Site.t("see")) + '<svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M8 7h9v9"/></svg></a><a class="pill white" href="https://wa.me/' + PALM.phone.replace(/[^\d]/g, "") + '?text=' + encodeURIComponent(Site.i(x, 0) + " " + Site.i(x, 1)) + '">' + Site.esc(Site.t("wa")) + '</a></div><a class="im" href="supply.html?industry=' + x.code + '" style="background-image:url(' + x.img + ')"></a></div>').join("");
-    document.getElementById("marq1").innerHTML = Site.marquee(PALM.partners);
-    Site.apply();
+    const total = deps.reduce((n, d) => n + Number(d.product_count || 0), 0);
+    document.getElementById("kpis").innerHTML = '<div><dt>' + Site.t("hero_k1") + '</dt><dd>' + Site.num(total) + '+</dd></div><div><dt>' + Site.t("hero_k2") + '</dt><dd>' + Site.num(deps.length) + '</dd></div><div><dt>' + Site.t("hero_k3") + '</dt><dd>' + Site.t("hero_k3v") + '</dd></div>';
+    document.getElementById("tiles").innerHTML = deps.map((d) => '<a class="tile" href="catalog.html?d=' + d.code + '"><span class="tile-ico">' + icon(d.icon || "box", 64) + '</span><span class="tile-name">' + Site.esc(Site.pick(d, "name")) + '</span><span class="tile-n">' + (d.product_count ? Site.num(d.product_count) + " " + Site.t("products") : Site.t("on_request")) + '</span></a>').join("");
   };
-  let feat = [], fopts = [];
-  const drawFeat = () => { const el = document.getElementById("feat"); if (!feat.length) { el.hidden = true; return; } el.hidden = false; el.innerHTML = '<div class="wallet-head"><h2>' + Site.esc(Site.t("sh_feat")) + '</h2></div><div class="shop">' + feat.map((p) => Site.card(p, fopts)).join("") + '</div>'; };
-  draw(); document.addEventListener("langchange", () => { draw(); drawFeat(); });
-  Site.catalogue().then(async (r) => { feat = r.filter((x) => x.featured).slice(0, 8); if (feat.length) { fopts = await Site.options(feat.map((x) => x.id)).catch(() => []); } drawFeat(); }).catch(() => {});
+  draw(); document.addEventListener("langchange", draw);
 };
 </script>
 </body>

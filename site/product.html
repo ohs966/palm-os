@@ -2,51 +2,52 @@
 <html lang="en">
 <head>
 <title>Product | Palm General Supply</title>
+<meta name="description" content="Product details, specifications and options. Add to your quote list and receive a quotation within 24 hours." />
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;700&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="styles.css?v=15" />
-<link rel="icon" href="img/emblem.png" />
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&family=IBM+Plex+Sans+Arabic:wght@400;500;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="styles.css?v=16" />
+<link rel="icon" href="img/emblem-dark.png" />
+<script src="icons.js?v=16"></script>
+<script src="site.js?v=16"></script>
 </head>
 <body>
-<div id="body" class="pdp-wrap"><div class="empty" style="padding:140px 20px">...</div></div>
-<script src="site.js?v=15"></script>
+
+<main id="main" class="wrap prod-page"><div class="empty" data-t="loading"></div></main>
 <script>
-window.PAGE = function () {
-  const id = new URLSearchParams(location.search).get("id");
-  let p = null, attrs = [], sel = {}, qty = 100, img = 0, failed = false;
-  const body = document.getElementById("body");
-  const selection = () => attrs.map((a) => { const o = a.options.find((x) => x.option_id === sel[a.id]); return o ? Site.pick(a.row, "attribute") + ": " + Site.pick(o, "option") : ""; }).filter(Boolean);
+window.PAGE = async function () {
+  const id = Site.q("id"); const main = document.getElementById("main");
+  let deps = [], rows = [], opts = [];
+  try { [deps, rows] = await Promise.all([Site.departments(), Site.catalogue()]); opts = await Site.options([id]).catch(() => []); } catch (e) { main.innerHTML = '<div class="empty">' + Site.esc(e.message) + '</div>'; return; }
+  const p = rows.find((x) => x.id === id); if (!p) { main.innerHTML = '<div class="empty">' + Site.t("no_results") + '</div>'; return; }
+  const attrs = Site.groupOptions(opts, id); const sel = {}; attrs.forEach((a) => { sel[a.id] = a.options[0].option_id; }); let qty = 1;
+  const dep = deps.find((d) => d.code === p.sector_code);
+  const wa = PALM.phone.replace(/[^\d]/g, "");
+  const chosen = (lang) => attrs.map((a) => { const o = a.options.find((x) => x.option_id === sel[a.id]); return (lang === "ar" ? a.row.attribute_ar : a.row.attribute_en) + ": " + (lang === "ar" ? o.option_ar : o.option_en); }).join(", ");
   const draw = () => {
-    if (failed || (p === undefined)) { body.innerHTML = '<div class="empty" style="padding:140px 20px">' + Site.esc(Site.t("sh_nf")) + '</div>'; return; }
-    if (!p) return;
-    const ind = Site.industryOf(p.sector_code); const imgs = (p.images && p.images.length) ? p.images : [ind.img];
     const name = Site.pick(p, "name"); document.title = name + " | Palm General Supply";
-    const text = name + (selection().length ? " (" + selection().join(", ") + ")" : "");
-    const wa = PALM.phone.replace(/[^\d]/g, "");
-    body.innerHTML = '<div class="pdp" style="--accent:' + ind.color + '">' +
-      '<div class="gal"><div class="main ' + ((p.images && p.images.length) ? "" : "fallback") + '" style="background-image:url(\'' + Site.esc(imgs[img] || imgs[0]) + '\')"></div>' +
-      (imgs.length > 1 ? '<div class="thumbs">' + imgs.map((u, i) => '<button data-img="' + i + '" class="' + (i === img ? "on" : "") + '" style="background-image:url(\'' + Site.esc(u) + '\')" aria-label="' + (i + 1) + '"></button>').join("") + '</div>' : '') + '</div>' +
-      '<div class="info"><div class="crumbs"><a class="pill" href="supply.html?industry=' + ind.code + '">' + Site.esc(Site.i(ind, 0)) + '</a>' + (p.category_id ? '<span class="mono">' + Site.esc(Site.pick(p, "category")) + '</span>' : '') + '</div>' +
-      '<h1>' + Site.esc(name) + '</h1>' +
-      (p.from_price ? '<div class="price"><span>' + Site.t("sh_from") + '</span> ' + Site.money(p.from_price) + ' <small>/ ' + Site.esc(p.unit) + '</small></div>' : '') +
+    const img = p.images && p.images[0];
+    const related = rows.filter((x) => x.category_id === p.category_id && x.id !== p.id).slice(0, 4);
+    main.innerHTML = Site.crumbs([{ label: Site.t("all_products"), href: "catalog.html" }, { label: Site.pick(dep, "name"), href: "catalog.html?d=" + p.sector_code }, { label: Site.pick(p, "category"), href: "catalog.html?d=" + p.sector_code + "&c=" + p.category_id }, { label: name }]) +
+      '<div class="prod"><div class="prod-media">' + (img ? '<img src="' + Site.esc(img) + '" alt="' + Site.esc(name) + '" />' : '<div class="prod-ico">' + icon(p.category_icon || p.sector_icon, 180) + '</div>') + '</div>' +
+      '<div class="prod-info"><div class="pc-cat">' + Site.esc(Site.pick(p, "category")) + '</div><h1>' + Site.esc(name) + '</h1><p class="muted small">' + Site.t("sku") + ': PGS-' + p.id.slice(0, 8).toUpperCase() + ' · ' + Site.t("unit") + ': ' + Site.esc(Site.unit(p.unit)) + '</p>' +
       '<p class="desc">' + Site.esc(Site.pick(p, "description")) + '</p>' +
-      attrs.map((a) => '<div class="attr"><div class="mono">' + Site.esc(Site.pick(a.row, "attribute")) + '</div><div class="opts">' + a.options.map((o) => '<button data-a="' + a.id + '" data-o="' + o.option_id + '" class="opt ' + (sel[a.id] === o.option_id ? "on" : "") + '">' + (o.color_hex ? '<i style="background:' + Site.esc(o.color_hex) + '"></i>' : '') + Site.esc(Site.pick(o, "option")) + '</button>').join("") + '</div></div>').join("") +
-      '<div class="attr"><div class="mono">' + Site.t("sh_qty") + '</div><div class="qty"><button data-q="-1" aria-label="-">−</button><input id="qty" type="number" min="1" value="' + qty + '" dir="ltr"><button data-q="1" aria-label="+">+</button></div></div>' +
-      '<div class="cta"><a class="pill white big" href="quote.html?industry=' + ind.code + '&product=' + encodeURIComponent(text) + '&qty=' + qty + '">' + Site.t("sh_req") + ' <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M8 7h9v9"/></svg></a>' +
-      '<a class="pill wa big" href="https://wa.me/' + wa + '?text=' + encodeURIComponent(Site.t("sh_waText") + "\n" + text + "\n" + Site.t("sh_qty") + ": " + qty) + '">' + Site.t("sh_wa") + '</a></div>' +
-      '<div class="note">' + Site.t("sh_note") + '</div></div></div>';
-    body.querySelectorAll("[data-img]").forEach((b) => b.onclick = () => { img = +b.dataset.img; draw(); });
-    body.querySelectorAll("[data-o]").forEach((b) => b.onclick = () => { sel[b.dataset.a] = b.dataset.o; draw(); });
-    body.querySelectorAll("[data-q]").forEach((b) => b.onclick = () => { qty = Math.max(1, qty + (+b.dataset.q) * (qty >= 100 ? 50 : 10)); draw(); });
-    const qi = body.querySelector("#qty"); qi.onchange = () => { qty = Math.max(1, parseInt(qi.value || "1", 10)); draw(); };
+      (attrs.length ? '<div class="choose"><h2>' + Site.t("choose") + '</h2>' + attrs.map((a) => '<div class="attr"><div class="attr-h">' + Site.esc(Site.lang === "ar" ? a.row.attribute_ar : a.row.attribute_en) + '</div><div class="opts">' + a.options.map((o) => '<button class="opt ' + (sel[a.id] === o.option_id ? "on" : "") + '" data-a="' + a.id + '" data-o="' + o.option_id + '" aria-pressed="' + (sel[a.id] === o.option_id) + '">' + (o.color_hex ? '<i style="background:' + Site.esc(o.color_hex) + '"></i>' : "") + Site.esc(Site.lang === "ar" ? o.option_ar : o.option_en) + '</button>').join("") + '</div></div>').join("") + '</div>' : "") +
+      '<div class="buy"><label class="qtybox"><span>' + Site.t("qty") + '</span><span class="qty"><button type="button" data-q="-1" aria-label="-">\u2212</button><input id="qty" type="number" min="1" value="' + qty + '" /><button type="button" data-q="1" aria-label="+">+</button></span></label>' +
+      '<button class="btn dark big" id="addlist">' + icon("quote", 18) + ' ' + Site.t("add_to_list") + '</button><a class="btn big" id="reqnow" href="quote.html">' + Site.t("request_now") + '</a><a class="btn wa big" href="https://wa.me/' + wa + '?text=' + encodeURIComponent(p.name_en + (attrs.length ? " (" + chosen("en") + ")" : "") + " x " + qty) + '">' + Site.t("whatsapp") + '</a></div>' +
+      '<p class="muted small">' + Site.t("price_note") + '</p></div></div>' +
+      ((p.specs || []).length ? '<section class="specs"><h2>' + Site.t("specs") + '</h2><table>' + p.specs.map((s) => '<tr><th>' + Site.esc(Site.lang === "ar" ? s.k_ar : s.k_en) + '</th><td>' + Site.esc(Site.lang === "ar" ? s.v_ar : s.v_en) + '</td></tr>').join("") + attrs.map((a) => '<tr><th>' + Site.esc(Site.lang === "ar" ? a.row.attribute_ar : a.row.attribute_en) + '</th><td>' + a.options.map((o) => Site.esc(Site.lang === "ar" ? o.option_ar : o.option_en)).join(", ") + '</td></tr>').join("") + '</table></section>' : "") +
+      (related.length ? '<section class="sec"><h2>' + Site.t("related") + '</h2><div class="pgrid">' + related.map((r) => Site.card(r, deps)).join("") + '</div></section>' : "");
+    main.querySelectorAll("[data-o]").forEach((b) => b.onclick = () => { sel[b.dataset.a] = b.dataset.o; draw(); });
+    main.querySelectorAll("[data-q]").forEach((b) => b.onclick = () => { qty = Math.max(1, qty + Number(b.dataset.q)); draw(); });
+    const qi = document.getElementById("qty"); qi.onchange = () => { qty = Math.max(1, parseInt(qi.value || "1", 10)); draw(); };
+    const add = () => Site.addToList({ id: p.id, name_en: p.name_en, name_ar: p.name_ar, unit: p.unit, qty, opts: attrs.map((a) => sel[a.id]), opts_text_en: chosen("en"), opts_text_ar: chosen("ar"), icon: p.category_icon });
+    document.getElementById("addlist").onclick = add;
+    document.getElementById("reqnow").onclick = (e) => { e.preventDefault(); add(); location.href = "quote.html"; };
+    Site.bindAdd(main.querySelector(".sec") || document.createElement("div"), rows);
   };
-  document.addEventListener("langchange", draw);
-  if (!id) { p = undefined; draw(); return; }
-  Promise.all([Site.rest("public_catalogue?select=*&id=eq." + encodeURIComponent(id)), Site.options([id]).catch(() => [])]).then(([r, o]) => {
-    p = r[0]; attrs = Site.groupOptions(o, id); attrs.forEach((a) => { sel[a.id] = a.options[0].option_id; }); draw();
-  }).catch(() => { failed = true; draw(); });
+  draw(); document.addEventListener("langchange", draw);
 };
 </script>
 </body>

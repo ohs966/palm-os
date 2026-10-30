@@ -1,177 +1,174 @@
-/* Palm Trade website. Reads the public catalogue from the Palm OS Supabase project (read only) and files quotation requests as leads. */
+/* Palm General Supply storefront. Reads the live catalogue from Palm OS (Supabase, read only),
+   keeps a quote list in the browser and sends quotation requests into Palm OS as leads. */
 window.PALM = {
   supabaseUrl: "https://gsgniarlokepcsagvvmq.supabase.co",
   supabaseAnonKey: "sb_publishable_bI8glK6s6T_UX5IWrvhJHQ_ThWSOp1j",
-  osUrl: "https://ohs966.github.io/palm-os/",
   phone: "+20 100 000 0000",
   email: "sales@palmtrade.eg",
-  /* Clients and partners shown in the scrolling strip. Replace with real names (or logo <img> tags) when available. */
   partners: ["img/partners/1.png", "img/partners/2.png", "img/partners/3.png"],
 };
 
-/* The nine industries. `sector` is the Palm OS sector code whose products are listed under the industry. */
-const INDUSTRIES = [
-  { code: "uniforms", sector: ["uniforms"], tint: "t1", color: "#2f5bd6", img: "img/uniforms.jpg?v=9", en: ["Uniforms", "& Workwear", "Hotel, medical, school, industrial and security uniforms, branded to your specification."], ar: ["اليونيفورم", "وملابس العمل", "يونيفورم فنادق وطبي ومدارس وصناعي وأمن، بعلامتك ومواصفاتك."] },
-  { code: "hospitality", sector: ["hospitality"], tint: "t8", color: "#c9a24a", img: "img/hotel.jpg?v=9", en: ["Hospitality", "& Hotel Supplies", "In-room amenities, bathrobes, slippers, linen and front-of-house products for hotels and resorts."], ar: ["الضيافة", "ومستلزمات الفنادق", "مستلزمات الغرف والأرواب والشباشب والبياضات ومنتجات الاستقبال للفنادق والمنتجعات."] },
-  { code: "housekeeping", sector: ["housekeeping_buffet", "cleaning"], tint: "t2", color: "#19a6c9", img: "img/cleaning.jpg?v=9", en: ["Housekeeping", "& Cleaning Supplies", "Chemicals, tools, microfibre, trolleys, dispensers and consumables for facilities of any size."], ar: ["الهاوس كيبينج", "ومستلزمات النظافة", "منظفات وأدوات ومايكروفايبر وعربات وموزعات ومستهلكات لأي منشأة."] },
-  { code: "kitchen", sector: ["kitchen_equipment"], tint: "t5", color: "#e06a1f", img: "img/kitchen.jpg?v=9", en: ["Kitchen", "& Buffet Equipment", "Commercial ranges, refrigeration, prep tables, chafing dishes and buffet service ware."], ar: ["المطابخ", "ومعدات البوفيه", "أفران ومعدات تبريد وطاولات تحضير وأواني تقديم وأدوات بوفيه."] },
-  { code: "meals", sector: ["fnb_meals"], tint: "t7", color: "#3aa655", img: "img/meals.jpg?v=9", en: ["Ready Meals", "& Catering", "Prepared meals for staff canteens, schools, hospitals and events, delivered daily."], ar: ["الوجبات الجاهزة", "والتموين", "وجبات جاهزة لكافتيريات الموظفين والمدارس والمستشفيات والفعاليات، تُسلَّم يومياً."] },
-  { code: "security", sector: ["security"], tint: "t6", color: "#8e9aa8", img: "img/security.jpg?v=9", en: ["Security", "Equipment", "Guard uniforms, radios, access control accessories and site safety gear for security firms."], ar: ["معدات", "الأمن", "يونيفورم حراسة، أجهزة لاسلكي، تحكم في الدخول ومعدات سلامة لشركات الأمن."] },
-  { code: "construction", sector: ["construction"], tint: "t4", color: "#f2b21b", img: "img/construction.jpg?v=9", en: ["Construction", "& Site Equipment", "PPE, tools, site consumables and safety signage for contractors and industrial sites."], ar: ["الإنشاءات", "ومعدات المواقع", "معدات وقاية وعدد ومستهلكات مواقع ولافتات سلامة للمقاولين والمنشآت الصناعية."] },
-  { code: "textiles", sector: ["fashion_textiles"], tint: "t3", color: "#d2487e", img: "img/textiles.jpg?v=9", en: ["Textiles", "& Fabrics", "Fabrics, trims and finished garments for brands, retailers and workshops."], ar: ["المنسوجات", "والأقمشة", "أقمشة وإكسسوارات وملابس جاهزة للعلامات التجارية والمتاجر والورش."] },
-];
-window.INDUSTRIES = INDUSTRIES;
-
 const DICT = {
   en: {
-    nav_home: "Home", nav_supply: "We Supply", nav_contact: "Contact", nav_quote: "Request Quotation", nav_quote_short: "Quote", lang: "AR",
-    hero_tag: "General Supplies | Procurement | Import & Export", hero_call: "Call us", hero_places: "Cairo\nAlexandria\nGiza\nPort Said\nSuez\nIsmailia\nMansoura\nTanta\nZagazig\nAsyut\nLuxor\nAswan\nHurghada\nSharm El Sheikh\nAll of Egypt", hero_p: "Supplying the uniforms, equipment, meals and consumables that hotels, hospitals, schools, factories and security firms run on. One quotation, one contract, delivered on time.",
-    hero_cta: "Request a quotation", hero_cta2: "What we supply",
-    sh_from: "From", sh_view: "View product", sh_req: "Request quotation", sh_wa: "WhatsApp", sh_qty: "Quantity", sh_opts: "options", sh_note: "Final price depends on quantity, options and branding.", sh_nf: "This product is not available.", sh_feat: "Featured products", sh_all: "See all", sh_choose: "Your selection", sh_waText: "Hello Palm, I would like a quotation for:",
-    w_title: "What we supply", w_p: "Eight industries, one supplier. Slide through the cards and open any industry to see its products.",
-    see: "See Products", wa: "WhatsApp Us", card_tag: "Industry",
-    pt_label: "Clients and Partners", pt_p: "Sectors and partners we work with",
-    b_title: "Why businesses buy through Palm",
-    b1t: "One contract", b1p: "Any mix of categories under a single quotation, contract and invoice.",
-    b2t: "48-hour quotation", b2p: "Every variant priced and lead times confirmed within two working days.",
-    b3t: "Quality checked", b3p: "Each order is inspected before it leaves the supplier, then tracked to your door.",
-    b4t: "Branded to spec", b4p: "Embroidery, printing and labels configured per item and included in the price.",
-    f_nav: "Pages", f_contact: "Contact", f_more: "More", f_signin: "Team sign in", f_rights: "General Supplies | Procurement | Import & Export",
-    s_title: "We Supply", s_p: "Pick an industry to see the products we supply for it, then request a quotation.",
-    s_all: "All industries", s_products: "products", s_none: "Request a quotation and tell us what you need.", s_back: "All industries",
-    q_title: "Request Quotation", q_p: "Tell us what you need and we come back with a full quotation within 48 hours.",
-    fm_company: "Company", fm_name: "Your name", fm_phone: "Phone or WhatsApp", fm_email: "Email", fm_industry: "Industry", fm_need: "What do you need?", fm_qty: "Approximate quantity", fm_send: "Send request", fm_pick: "Choose...",
-    fm_ok: "Thank you. Your request is in our system; we will come back to you within 48 hours.", fm_bad: "Could not send the request. Please call or WhatsApp us instead.",
-    c_call: "Call", c_wa: "WhatsApp", c_mail: "Email", loading: "Loading...", unit: "Unit",
+    lang: "العربية", all_products: "All Products", search_ph: "Search products, sizes or standards (e.g. M10 bolt, nitrile gloves)", search_btn: "Search",
+    quote_list: "Quote list", request_quote: "Request a quotation", home: "Home", departments: "Departments", shop_all: "Shop all",
+    hero_t: "Everything your business runs on, supplied.", hero_p: "Fasteners, safety, cleaning, electrical, tools, uniforms and more. Build a list, send it, and get a full quotation within 24 hours.",
+    hero_k1: "Products in stock range", hero_k2: "Departments", hero_k3: "Quotation turnaround", hero_k3v: "24 h",
+    shop_by: "Shop by department", on_request: "On request", products: "products", items: "items", categories: "Categories",
+    how_t: "How ordering works", how1t: "Build your list", how1p: "Add products with the exact size, finish and quantity you need.", how2t: "Send one request", how2p: "Your whole list arrives with our team in one message.", how3t: "Get your quotation", how3p: "Priced, itemised and delivered to you within 24 hours.",
+    partners: "Clients and partners", cant_find: "Can't find it?", cant_find_p: "We source beyond this catalogue. Tell us what you need and we will quote it.", tell_us: "Tell us what you need",
+    filters: "Filters", search_within: "Search within", clear: "Clear all", results: "results", sort: "Sort", sort_name: "Name A to Z", sort_options: "Most options",
+    grid: "Grid", list: "List", view: "View", add_quote: "Add to quote", added: "Added", details: "Details", options: "options", no_results: "No products match. Try fewer filters or a different word.",
+    specs: "Specifications", choose: "Choose options", qty: "Quantity", unit: "Unit", add_to_list: "Add to quote list", request_now: "Request quotation now", whatsapp: "WhatsApp us",
+    related: "More in this category", price_note: "Prices depend on quantity, options and delivery. You will receive a full quotation within 24 hours.", sku: "Item", description: "Description",
+    q_title: "Request a quotation", q_p: "Send your list and we will reply with a priced quotation within 24 hours.", q_empty: "Your quote list is empty.", q_browse: "Browse products",
+    q_items: "Items in your list", remove: "Remove", fm_company: "Company", fm_name: "Your name", fm_phone: "Phone / WhatsApp", fm_email: "Email", fm_notes: "Anything else we should know (delivery city, deadline, branding)",
+    fm_send: "Send request", fm_ok: "Thank you. Your request has reached our team and you will hear from us within 24 hours.", fm_bad: "Something went wrong. Please try again or call us.",
+    c_call: "Call", c_wa: "WhatsApp", c_mail: "Email", loading: "Loading...", f_pages: "Shop", f_contact: "Contact", f_more: "Company",
+    f_tag: "General Supplies | Procurement | Import & Export", other_item: "Add an item that is not listed", other_ph: "Describe the item, size and quantity", add: "Add",
   },
   ar: {
-    nav_home: "الرئيسية", nav_supply: "ماذا نورّد", nav_contact: "اتصل بنا", nav_quote: "اطلب عرض سعر", nav_quote_short: "عرض سعر", lang: "EN",
-    hero_tag: "توريدات عامة | مشتريات | استيراد وتصدير", hero_call: "اتصل بنا", hero_places: "القاهرة\nالإسكندرية\nالجيزة\nبورسعيد\nالسويس\nالإسماعيلية\nالمنصورة\nطنطا\nالزقازيق\nأسيوط\nالأقصر\nأسوان\nالغردقة\nشرم الشيخ\nكل مصر", hero_p: "نورّد اليونيفورم والمعدات والوجبات والمستهلكات التي تعمل بها الفنادق والمستشفيات والمدارس والمصانع وشركات الأمن. عرض سعر واحد، عقد واحد، تسليم في الموعد.",
-    hero_cta: "اطلب عرض سعر", hero_cta2: "ماذا نورّد",
-    w_title: "ماذا نورّد", w_p: "ثمانية قطاعات، مورّد واحد. مرّر البطاقات وافتح أي قطاع لترى منتجاته.",
-    see: "عرض المنتجات", wa: "راسلنا واتساب", card_tag: "قطاع",
-    pt_label: "عملاء وشركاء", pt_p: "قطاعات وشركاء نعمل معهم",
-    b_title: "لماذا تشتري الشركات عبر بالم",
-    b1t: "عقد واحد", b1p: "أي مزيج من الفئات تحت عرض سعر وعقد وفاتورة واحدة.",
-    sh_from: "يبدأ من", sh_view: "عرض المنتج", sh_req: "اطلب عرض سعر", sh_wa: "واتساب", sh_qty: "الكمية", sh_opts: "خيارات", sh_note: "السعر النهائي يعتمد على الكمية والخيارات والشعار.", sh_nf: "هذا المنتج غير متاح.", sh_feat: "منتجات مميزة", sh_all: "عرض الكل", sh_choose: "اختيارك", sh_waText: "مرحبا بالم، أريد عرض سعر لـ:",
-    b2t: "عرض سعر خلال 48 ساعة", b2p: "كل خيار مسعّر ومدد التوريد مؤكدة خلال يومي عمل.",
-    b3t: "فحص جودة", b3p: "كل طلب يُفحص قبل مغادرة المورد ثم يُتابع حتى بابك.",
-    b4t: "بعلامتك التجارية", b4p: "التطريز والطباعة والليبل تُحدد لكل صنف وتُضمَّن في السعر.",
-    f_nav: "الصفحات", f_contact: "اتصل بنا", f_more: "المزيد", f_signin: "دخول الفريق", f_rights: "شركة توريدات عامة، مصر",
-    s_title: "ماذا نورّد", s_p: "اختر قطاعاً لترى المنتجات التي نورّدها له ثم اطلب عرض سعر.",
-    s_all: "كل القطاعات", s_products: "منتج", s_none: "اطلب عرض سعر وأخبرنا بما تحتاجه.", s_back: "كل القطاعات",
-    q_title: "اطلب عرض سعر", q_p: "أخبرنا بما تحتاجه ونعود إليك بعرض سعر كامل خلال 48 ساعة.",
-    fm_company: "الشركة", fm_name: "اسمك", fm_phone: "الهاتف أو واتساب", fm_email: "البريد الإلكتروني", fm_industry: "القطاع", fm_need: "ماذا تحتاج؟", fm_qty: "الكمية التقريبية", fm_send: "إرسال الطلب", fm_pick: "اختر...",
-    fm_ok: "شكراً. طلبك في نظامنا وسنعود إليك خلال 48 ساعة.", fm_bad: "تعذر إرسال الطلب. اتصل بنا أو راسلنا على واتساب.",
-    c_call: "اتصال", c_wa: "واتساب", c_mail: "بريد", loading: "جارٍ التحميل...", unit: "الوحدة",
+    lang: "English", all_products: "كل المنتجات", search_ph: "ابحث عن منتج أو مقاس أو مواصفة (مثال: مسمار M10، جوانتي نيتريل)", search_btn: "بحث",
+    quote_list: "قائمة العرض", request_quote: "اطلب عرض سعر", home: "الرئيسية", departments: "الأقسام", shop_all: "عرض الكل",
+    hero_t: "كل ما يحتاجه عملك، نوفره لك.", hero_p: "مسامير، سلامة، نظافة، كهرباء، عدد، زي موحد والمزيد. جهز قائمتك وأرسلها واستلم عرض سعر كامل خلال 24 ساعة.",
+    hero_k1: "منتج في الكتالوج", hero_k2: "قسم", hero_k3: "وقت تجهيز العرض", hero_k3v: "24 ساعة",
+    shop_by: "تسوق حسب القسم", on_request: "حسب الطلب", products: "منتج", items: "صنف", categories: "الفئات",
+    how_t: "كيف تطلب", how1t: "جهز قائمتك", how1p: "أضف المنتجات بالمقاس والتشطيب والكمية المطلوبة بالضبط.", how2t: "أرسل طلبا واحدا", how2p: "تصل قائمتك كاملة لفريقنا في رسالة واحدة.", how3t: "استلم عرض السعر", how3p: "مسعر ومفصل لكل بند خلال 24 ساعة.",
+    partners: "عملاؤنا وشركاؤنا", cant_find: "لم تجد ما تبحث عنه؟", cant_find_p: "نوفر ما هو أبعد من هذا الكتالوج. أخبرنا بما تحتاجه وسنسعره لك.", tell_us: "أخبرنا بما تحتاجه",
+    filters: "التصفية", search_within: "ابحث في النتائج", clear: "مسح الكل", results: "نتيجة", sort: "الترتيب", sort_name: "الاسم أ إلى ي", sort_options: "الأكثر خيارات",
+    grid: "شبكة", list: "قائمة", view: "العرض", add_quote: "أضف للعرض", added: "تمت الإضافة", details: "التفاصيل", options: "خيارات", no_results: "لا توجد منتجات مطابقة. جرب تصفية أقل أو كلمة أخرى.",
+    specs: "المواصفات", choose: "اختر المواصفات", qty: "الكمية", unit: "الوحدة", add_to_list: "أضف لقائمة العرض", request_now: "اطلب عرض سعر الآن", whatsapp: "راسلنا واتساب",
+    related: "المزيد في هذه الفئة", price_note: "الأسعار تعتمد على الكمية والمواصفات والتوصيل. ستستلم عرض سعر كامل خلال 24 ساعة.", sku: "الصنف", description: "الوصف",
+    q_title: "اطلب عرض سعر", q_p: "أرسل قائمتك وسنرد بعرض سعر مفصل خلال 24 ساعة.", q_empty: "قائمة العرض فارغة.", q_browse: "تصفح المنتجات",
+    q_items: "الأصناف في قائمتك", remove: "حذف", fm_company: "الشركة", fm_name: "الاسم", fm_phone: "الهاتف / واتساب", fm_email: "البريد الإلكتروني", fm_notes: "أي تفاصيل أخرى (مدينة التوصيل، الموعد، الشعار)",
+    fm_send: "أرسل الطلب", fm_ok: "شكرا لك. وصل طلبك لفريقنا وسنتواصل معك خلال 24 ساعة.", fm_bad: "حدث خطأ. حاول مرة أخرى أو اتصل بنا.",
+    c_call: "اتصل", c_wa: "واتساب", c_mail: "البريد", loading: "جار التحميل...", f_pages: "التسوق", f_contact: "تواصل معنا", f_more: "الشركة",
+    f_tag: "توريدات عامة | مشتريات | استيراد وتصدير", other_item: "أضف صنفا غير موجود", other_ph: "اكتب الصنف والمقاس والكمية", add: "أضف",
   },
 };
 
-const ARROW = '<svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M8 7h9v9"/></svg>';
-
 const Site = {
   lang: (function () { try { return localStorage.getItem("pt_lang") || "en"; } catch (e) { return "en"; } })(),
-  t(k) { return (DICT[this.lang] || DICT.en)[k] ?? DICT.en[k] ?? k; },
-  i(ind, n) { return (ind[this.lang] || ind.en)[n]; },
-  pick(row, base) { return (this.lang === "ar" ? row[base + "_ar"] : row[base + "_en"]) || row[base + "_en"] || row[base + "_ar"] || ""; },
-  esc(s) { return String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c])); },
-  setLang(l) { this.lang = l; try { localStorage.setItem("pt_lang", l); } catch (e) {} this.apply(); document.dispatchEvent(new CustomEvent("langchange")); },
+  t(k) { return (DICT[this.lang] && DICT[this.lang][k]) || DICT.en[k] || k; },
+  pick(row, base) { if (!row) return ""; return (this.lang === "ar" ? row[base + "_ar"] : row[base + "_en"]) || row[base + "_en"] || row[base + "_ar"] || ""; },
+  esc(s) { return String(s == null ? "" : s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c])); },
+  q(k) { return new URLSearchParams(location.search).get(k); },
+  setLang(l) { this.lang = l; try { localStorage.setItem("pt_lang", l); } catch (e) {} this.apply(); document.dispatchEvent(new Event("langchange")); },
   apply() {
     document.documentElement.lang = this.lang; document.documentElement.dir = this.lang === "ar" ? "rtl" : "ltr";
     document.querySelectorAll("[data-t]").forEach((el) => { el.textContent = this.t(el.dataset.t); });
     document.querySelectorAll("[data-t-ph]").forEach((el) => { el.placeholder = this.t(el.dataset.tPh); });
+    this.renderHeaderDynamic();
   },
-  page() { return location.pathname.split("/").pop() || "index.html"; },
-  header() {
-    const on = (f) => (this.page() === f ? "on" : "");
-    return `<div class="header" id="hdr"><nav class="navpill">
-      <a href="index.html" class="brand"><img src="img/emblem.png" alt="Palm" /></a>
-      <a href="index.html" class="${on("index.html")}" data-t="nav_home"></a>
-      <a href="supply.html" class="${on("supply.html") || on("product.html")}" data-t="nav_supply"></a>
-      <a href="quote.html" class="${on("quote.html")}"><span class="long" data-t="nav_quote"></span><span class="short" data-t="nav_quote_short"></span></a>
-      <span class="sep"></span>
-      <button class="lang" data-lang-toggle data-t="lang"></button></nav></div>`;
-  },
-  footer() {
-    const wa = PALM.phone.replace(/[^\d]/g, "");
-    return `<footer>
-      <div class="word fbrand"><img src="img/emblem.png" alt="Palm" /><span>PALM GENERAL SUPPLY</span></div>
-      <div class="cols">
-        <div><span class="mono" data-t="f_nav"></span><a href="index.html" data-t="nav_home"></a><a href="supply.html" data-t="nav_supply"></a><a href="quote.html#contact" data-t="nav_contact"></a><a href="quote.html" data-t="nav_quote"></a></div>
-        <div><span class="mono" data-t="f_contact"></span><a href="tel:${PALM.phone.replace(/\s/g, "")}" dir="ltr">${PALM.phone}</a><a href="https://wa.me/${wa}">WhatsApp</a><a href="mailto:${PALM.email}">${PALM.email}</a></div>
-        <div><span class="mono" data-t="f_more"></span><a href="#">LinkedIn</a><a href="#">Instagram</a></div>
-      </div>
-      <div class="base"><span>&copy; ${new Date().getFullYear()} Palm General Supply</span><span data-t="f_rights"></span></div></footer>`;
-  },
-  marquee(items, cls) { const s = items.map((x) => /\.(png|jpg|svg|webp)$/i.test(x) ? `<span class="logo"><img src="${this.esc(x)}" alt="" ></span>` : `<span>${this.esc(x)}</span>`).join(""); const rep = items.length < 6 ? Math.ceil(12 / items.length) : 2; return `<div class="marquee ${cls || ""}"><div class="track">${s.repeat(rep)}</div></div>`; },
+  unit(u) { const ar = { box: "علبة", piece: "قطعة", pair: "زوج", set: "طقم", pack: "عبوة", roll: "رول", can: "جركن", carton: "كرتونة", bundle: "ربطة", metre: "متر" }; return this.lang === "ar" ? (ar[u] || u || "") : (u || ""); },
+  num(n) { return new Intl.NumberFormat(this.lang === "ar" ? "ar-EG" : "en-US").format(n); },
+
+  /* ---------- data ---------- */
   async rest(path, opts) {
-    const r = await fetch(`${PALM.supabaseUrl}/rest/v1/${path}`, { ...(opts || {}), headers: { apikey: PALM.supabaseAnonKey, Authorization: `Bearer ${PALM.supabaseAnonKey}`, "Content-Type": "application/json", Prefer: "return=minimal" } });
-    if (!r.ok) throw new Error(`${r.status} ${await r.text()}`);
+    const r = await fetch(PALM.supabaseUrl + "/rest/v1/" + path, Object.assign({}, opts || {}, { headers: { apikey: PALM.supabaseAnonKey, Authorization: "Bearer " + PALM.supabaseAnonKey, "Content-Type": "application/json", Prefer: "return=minimal" } }));
+    if (!r.ok) throw new Error(r.status + " " + (await r.text()));
     const txt = await r.text(); return txt ? JSON.parse(txt) : null;
   },
-  catalogue() { return this.rest("public_catalogue?select=*&order=sector_sort,category_sort,name_en"); },
+  _cache: {},
+  async cached(key, path) {
+    if (this._cache[key]) return this._cache[key];
+    try { const s = JSON.parse(sessionStorage.getItem("pgs_" + key) || "null"); if (s && Date.now() - s.t < 10 * 60 * 1000) return (this._cache[key] = s.d); } catch (e) {}
+    const d = await this.rest(path); this._cache[key] = d;
+    try { sessionStorage.setItem("pgs_" + key, JSON.stringify({ t: Date.now(), d })); } catch (e) {}
+    return d;
+  },
+  departments() { return this.cached("deps", "public_departments?select=*&order=sort_order"); },
+  async catalogue() { const deps = await this.departments(); const codes = new Set(deps.map((d) => d.code)); const rows = await this.cached("cat", "public_catalogue?select=*&order=sector_sort,category_sort,name_en"); return rows.filter((r) => codes.has(r.sector_code)); },
   options(ids) { return this.rest("public_product_options?select=*&order=attribute_sort,option_sort" + (ids ? "&product_id=in.(" + ids.join(",") + ")" : "")); },
-  industryOf(sectorCode) { return INDUSTRIES.find((x) => x.sector.includes(sectorCode)) || INDUSTRIES[0]; },
-  money(n) { return new Intl.NumberFormat(this.lang === "ar" ? "ar-EG" : "en-US", { maximumFractionDigits: 0 }).format(n) + (this.lang === "ar" ? " ج.م" : " EGP"); },
-  /** Groups option rows into attributes: [{ id, name, options:[{id,name,hex}] }] */
   groupOptions(rows, pid) {
-    const m = new Map(); rows.filter((r) => r.product_id === pid).forEach((r) => { if (!m.has(r.attribute_id)) m.set(r.attribute_id, { id: r.attribute_id, row: r, options: [] }); m.get(r.attribute_id).options.push(r); });
+    const m = new Map(); (rows || []).filter((r) => r.product_id === pid).forEach((r) => { if (!m.has(r.attribute_id)) m.set(r.attribute_id, { id: r.attribute_id, row: r, options: [] }); m.get(r.attribute_id).options.push(r); });
     return [...m.values()];
   },
-  /** E-commerce product card used on We Supply and the homepage. */
-  card(p, opts) {
-    const ind = this.industryOf(p.sector_code); const img = (p.images && p.images[0]) || ind.img; const attrs = this.groupOptions(opts || [], p.id);
-    const colours = attrs.flatMap((a) => a.options.filter((o) => o.color_hex)).slice(0, 6);
-    const summary = attrs.filter((a) => !a.options.some((o) => o.color_hex)).map((a) => this.pick(a.row, "attribute") + ": " + a.options.length).slice(0, 2).join(" · ");
-    const wa = PALM.phone.replace(/[^\d]/g, "");
-    return `<div class="scard" style="--accent:${ind.color}"><a class="sim ${p.images && p.images[0] ? "" : "fallback"}" href="product.html?id=${p.id}" style="background-image:url('${this.esc(img)}')"></a>
-      <div class="sbody"><div class="mono">${this.esc(p.category_id ? this.pick(p, "category") : this.pick(p, "sector"))}</div>
-      <a href="product.html?id=${p.id}"><h3>${this.esc(this.pick(p, "name"))}</h3></a>
-      ${colours.length ? `<div class="sw">${colours.map((o) => `<i style="background:${this.esc(o.color_hex)}" title="${this.esc(this.pick(o, "option"))}"></i>`).join("")}</div>` : ""}
-      ${summary ? `<div class="sum">${this.esc(summary)}</div>` : ""}
-      <div class="sfoot">${p.from_price ? `<div class="price"><span>${this.t("sh_from")}</span> ${this.money(p.from_price)}</div>` : `<div class="price muted">${this.esc(p.unit || "")}</div>`}
-      <div class="sbtn"><a class="pill white" href="product.html?id=${p.id}">${this.t("sh_view")}</a><a class="pill wa" aria-label="WhatsApp" href="https://wa.me/${wa}?text=${encodeURIComponent(this.t("sh_waText") + " " + this.pick(p, "name"))}"><svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm5.3 14.1c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .2-3.3-.7-2.8-1.1-4.5-3.9-4.7-4.1-.1-.2-1.1-1.5-1.1-2.9s.7-2 1-2.3c.2-.3.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.8 2c.1.2.1.4 0 .5l-.3.5-.4.4c-.1.1-.3.3-.1.6.1.3.6 1 1.3 1.6.9.8 1.6 1 1.9 1.2.2.1.4.1.5-.1l.7-.9c.2-.2.4-.2.6-.1l1.9.9c.3.1.5.2.5.3.1.2.1.7-.1 1.3z"/></svg></a></div></div></div></div>`;
+
+  /* ---------- quote list (kept in this browser) ---------- */
+  list() { try { return JSON.parse(localStorage.getItem("pgs_quote") || "[]"); } catch (e) { return []; } },
+  saveList(l) { try { localStorage.setItem("pgs_quote", JSON.stringify(l)); } catch (e) {} this.renderHeaderDynamic(); document.dispatchEvent(new Event("listchange")); },
+  addToList(item) {
+    const l = this.list(); const key = item.id + "|" + (item.opts || []).join("|");
+    const ex = l.find((x) => x.key === key); if (ex) ex.qty = Number(ex.qty) + Number(item.qty || 1); else l.push(Object.assign({ key }, item));
+    this.saveList(l); this.toast(this.t("added") + ": " + (this.lang === "ar" ? item.name_ar : item.name_en));
   },
-  sectors() { return this.rest("sectors?select=id,code,name_ar,name_en&order=sort_order"); },
-  /** Files a quotation request as a draft party + contact + lead, the same records the Palm OS intake form creates. */
-  async submitLead(f) {
+  toast(msg) { let el = document.getElementById("toast"); if (!el) { el = document.createElement("div"); el.id = "toast"; el.className = "toast"; el.setAttribute("role", "status"); document.body.appendChild(el); } el.textContent = msg; el.classList.add("on"); clearTimeout(this._tt); this._tt = setTimeout(() => el.classList.remove("on"), 2400); },
+
+  /* ---------- quotation request -> Palm OS lead ---------- */
+  async submitRequest(f, items) {
     const pid = crypto.randomUUID();
-    const ind = INDUSTRIES.find((x) => x.code === f.industry); const sectors = await this.sectors().catch(() => []);
-    const sec = ind ? sectors.find((s) => s.code === ind.sector[0]) : null;
-    await this.rest("parties", { method: "POST", body: JSON.stringify({ id: pid, name_ar: f.company, name_en: f.company, status: "draft", sector: sec ? [sec.code] : [], preferred_language: this.lang, notes: `${ind ? this.i(ind, 0) + " " + this.i(ind, 1) + "\n" : ""}${f.need}\n${f.qty || ""}` }) });
+    const lines = items.map((x, i) => (i + 1) + ". " + x.name_en + (x.opts_text_en ? " (" + x.opts_text_en + ")" : "") + " x " + x.qty + " " + (x.unit || "")).join("\n");
+    const need = (lines ? lines + "\n\n" : "") + (f.notes || "");
+    await this.rest("parties", { method: "POST", body: JSON.stringify({ id: pid, name_ar: f.company || f.name, name_en: f.company || f.name, status: "draft", sector: [], preferred_language: this.lang, notes: need }) });
     await this.rest("party_roles", { method: "POST", body: JSON.stringify({ party_id: pid, role: "client" }) });
     await this.rest("contacts", { method: "POST", body: JSON.stringify({ party_id: pid, name: f.name, phone: f.phone, whatsapp: f.phone, email: f.email || null, language: this.lang, is_primary: true }) });
-    await this.rest("leads", { method: "POST", body: JSON.stringify({ party_id: pid, contact_name: f.name, company_name: f.company, phone: f.phone, email: f.email || null, sector_id: sec ? sec.id : null, source: "website", stage: "new", need_description: (ind ? this.i(ind, 0) + ": " : "") + f.need, estimated_qty: f.qty || null }) });
+    await this.rest("leads", { method: "POST", body: JSON.stringify({ party_id: pid, contact_name: f.name, company_name: f.company || null, phone: f.phone, email: f.email || null, source: "website", stage: "new", need_description: need, estimated_qty: items.length ? items.length + " items" : null }) });
   },
-  form(el, preset) {
-    const render = () => {
-      el.innerHTML = `<form class="form" id="leadform">
-        <label><span data-t="fm_company"></span><input name="company" required></label>
-        <div class="g2"><label><span data-t="fm_name"></span><input name="name" required></label><label><span data-t="fm_phone"></span><input name="phone" required dir="ltr"></label></div>
-        <div class="g2"><label><span data-t="fm_email"></span><input name="email" type="email" dir="ltr"></label>
-        <label><span data-t="fm_industry"></span><select name="industry"><option value="">${this.t("fm_pick")}</option>${INDUSTRIES.map((x) => `<option value="${x.code}" ${preset && preset.industry === x.code ? "selected" : ""}>${this.esc(this.i(x, 0) + " " + this.i(x, 1))}</option>`).join("")}</select></label></div>
-        <label><span data-t="fm_need"></span><textarea name="need" required>${this.esc((preset && preset.need) || "")}</textarea></label>
-        <label><span data-t="fm_qty"></span><input name="qty" value="${this.esc((preset && preset.qty) || "")}"></label>
-        <button class="pill clay" type="submit"><span data-t="fm_send"></span>${ARROW}</button>
-        <div id="formmsg" class="msg" style="display:none"></div></form>`;
-      this.apply();
-      el.querySelector("#leadform").addEventListener("submit", async (e) => {
-        e.preventDefault(); const fd = Object.fromEntries(new FormData(e.target).entries()); const msg = el.querySelector("#formmsg"); const btn = e.target.querySelector("button"); btn.disabled = true;
-        try { await this.submitLead(fd); msg.className = "msg ok"; msg.textContent = this.t("fm_ok"); msg.style.display = "block"; e.target.reset(); }
-        catch (err) { msg.className = "msg bad"; msg.textContent = this.t("fm_bad") + " (" + err.message.slice(0, 60) + ")"; msg.style.display = "block"; }
-        btn.disabled = false;
-      });
-    };
-    render(); document.addEventListener("langchange", render);
+
+  /* ---------- layout ---------- */
+  header() {
+    return `<a class="skip" href="#main">Skip to content</a>
+    <header class="top" id="top"><div class="top-in">
+      <a class="logo" href="index.html" aria-label="Palm General Supply"><img src="img/emblem.png" alt="" /><span>PALM<b>GENERAL SUPPLY</b></span></a>
+      <button class="allbtn" id="allbtn" aria-expanded="false" aria-controls="mega"><span class="burger" aria-hidden="true"><i></i><i></i><i></i></span><span data-t="all_products"></span></button>
+      <form class="search" id="searchform" role="search" action="catalog.html"><input id="q" name="q" type="search" data-t-ph="search_ph" autocomplete="off" aria-label="Search" /><button type="submit" aria-label="Search">${icon("search", 20)}</button></form>
+      <nav class="tools">
+        <button class="lang" data-lang-toggle data-t="lang"></button>
+        <a class="qlink" href="quote.html">${icon("quote", 22)}<span class="lbl" data-t="quote_list"></span><span class="count" id="qcount">0</span></a>
+      </nav>
+    </div>
+    <div class="mega" id="mega" hidden><div class="mega-in"><ul class="mega-deps" id="megadeps"></ul><div class="mega-cats" id="megacats"></div></div></div>
+    </header>`;
+  },
+  crumbs(items) { return `<nav class="crumbs" aria-label="Breadcrumb"><a href="index.html">${this.t("home")}</a>${items.map((x) => `<span aria-hidden="true">›</span>${x.href ? `<a href="${x.href}">${this.esc(x.label)}</a>` : `<span>${this.esc(x.label)}</span>`}`).join("")}</nav>`; },
+  footer() {
+    const wa = PALM.phone.replace(/[^\d]/g, "");
+    return `<section class="help"><div class="wrap help-in"><div><h2 data-t="cant_find"></h2><p data-t="cant_find_p"></p></div><div class="help-act"><a class="btn dark" href="quote.html#other" data-t="tell_us"></a><a class="btn wa" href="https://wa.me/${wa}">WhatsApp</a></div></div></section>
+    <footer class="foot"><div class="wrap foot-in">
+      <div class="fbrand"><img src="img/emblem.png" alt="" /><span>PALM GENERAL SUPPLY</span><p data-t="f_tag"></p></div>
+      <div><h3 data-t="f_pages"></h3><div id="footdeps"></div></div>
+      <div><h3 data-t="f_contact"></h3><p dir="ltr">${PALM.phone}</p><a href="https://wa.me/${wa}">WhatsApp</a><p>${PALM.email}</p></div>
+      <div><h3 data-t="f_more"></h3><a href="quote.html" data-t="request_quote"></a><a href="#">LinkedIn</a><a href="#">Instagram</a></div>
+    </div><div class="wrap foot-bot">© ${new Date().getFullYear()} Palm General Supply</div></footer>`;
+  },
+  async renderHeaderDynamic() {
+    const c = document.getElementById("qcount"); if (c) { const n = this.list().length; c.textContent = n; c.hidden = !n; }
+    let deps; try { deps = await this.departments(); } catch (e) { return; }
+    const md = document.getElementById("megadeps"); const fd = document.getElementById("footdeps");
+    if (md) {
+      md.innerHTML = deps.map((d, i) => `<li><a href="catalog.html?d=${d.code}" data-dep="${d.code}" class="${i === 0 ? "on" : ""}">${icon(d.icon || "box", 22)}<span>${this.esc(this.pick(d, "name"))}</span><span class="n">${d.product_count ? this.num(d.product_count) : this.t("on_request")}</span></a></li>`).join("");
+      const showCats = (code) => { const d = deps.find((x) => x.code === code); md.querySelectorAll("a").forEach((a) => a.classList.toggle("on", a.dataset.dep === code)); document.getElementById("megacats").innerHTML = `<h3><a href="catalog.html?d=${d.code}">${this.esc(this.pick(d, "name"))} <span>${this.t("shop_all")} ›</span></a></h3><p>${this.esc(this.pick(d, "blurb"))}</p><div class="mc-grid">${(d.categories || []).map((c) => `<a href="catalog.html?d=${d.code}&c=${c.id}">${icon(c.icon || d.icon, 30)}<span>${this.esc(this.pick(c, "name"))}</span></a>`).join("")}</div>`; };
+      md.querySelectorAll("a").forEach((a) => { a.addEventListener("mouseenter", () => showCats(a.dataset.dep)); a.addEventListener("focus", () => showCats(a.dataset.dep)); });
+      if (deps[0]) showCats(deps[0].code);
+    }
+    if (fd) fd.innerHTML = deps.filter((d) => d.product_count).slice(0, 8).map((d) => `<a href="catalog.html?d=${d.code}">${this.esc(this.pick(d, "name"))}</a>`).join("");
+  },
+  /* product card used on home and catalogue */
+  card(p, deps, mode) {
+    const name = this.pick(p, "name"); const img = p.images && p.images[0];
+    const specs = (p.specs || []).slice(0, mode === "list" ? 4 : 2).map((s) => `<li><span>${this.esc(this.lang === "ar" ? s.k_ar : s.k_en)}</span><b>${this.esc(this.lang === "ar" ? s.v_ar : s.v_en)}</b></li>`).join("");
+    return `<article class="pc ${mode || ""}"><a class="pc-img" href="product.html?id=${p.id}" aria-hidden="true" tabindex="-1">${img ? `<img src="${this.esc(img)}" alt="" loading="lazy" />` : icon(p.category_icon || p.sector_icon || "box", 64)}</a>
+      <div class="pc-body"><div class="pc-cat">${this.esc(this.pick(p, "category"))}</div><h3><a href="product.html?id=${p.id}">${this.esc(name)}</a></h3><ul class="pc-specs">${specs}</ul>
+      <div class="pc-foot"><span class="pc-unit">${this.t("unit")}: ${this.esc(this.unit(p.unit))}</span><button class="btn sm" data-add="${p.id}">${icon("quote", 16)}<span>${this.t("add_quote")}</span></button></div></div></article>`;
+  },
+  bindAdd(root, rows) {
+    root.querySelectorAll("[data-add]").forEach((b) => b.onclick = () => { const p = rows.find((x) => x.id === b.dataset.add); if (p) this.addToList({ id: p.id, name_en: p.name_en, name_ar: p.name_ar, unit: p.unit, qty: 1, opts: [], opts_text_en: "", opts_text_ar: "", icon: p.category_icon }); b.classList.add("ok"); setTimeout(() => b.classList.remove("ok"), 1500); });
   },
 };
 window.Site = Site;
+ICONS.search = '<circle cx="21" cy="21" r="13"/><path d="M31 31l11 11"/>';
 
 document.addEventListener("DOMContentLoaded", () => {
   document.body.insertAdjacentHTML("afterbegin", Site.header());
   document.body.insertAdjacentHTML("beforeend", Site.footer());
-  Site.apply();
+  const qv = Site.q("q"); if (qv) document.getElementById("q").value = qv;
+  const allbtn = document.getElementById("allbtn"); const mega = document.getElementById("mega");
+  const setMega = (open) => { mega.hidden = !open; allbtn.setAttribute("aria-expanded", String(open)); document.body.classList.toggle("mega-open", open); };
+  allbtn.addEventListener("click", () => setMega(mega.hidden));
+  document.addEventListener("keydown", (e) => { if (e.key === "Escape") setMega(false); });
+  document.addEventListener("click", (e) => { if (!mega.hidden && !e.target.closest("#mega") && !e.target.closest("#allbtn")) setMega(false); });
   document.querySelectorAll("[data-lang-toggle]").forEach((b) => b.addEventListener("click", () => Site.setLang(Site.lang === "ar" ? "en" : "ar")));
-  const hdr = document.getElementById("hdr"); const onScroll = () => hdr.classList.toggle("scrolled", window.scrollY > 40); onScroll(); addEventListener("scroll", onScroll, { passive: true });
+  Site.apply();
   if (window.PAGE) window.PAGE();
 });
