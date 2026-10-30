@@ -5,11 +5,14 @@ window.PALM = {
   supabaseAnonKey: "sb_publishable_bI8glK6s6T_UX5IWrvhJHQ_ThWSOp1j",
   phone: "+20 100 000 0000",
   email: "sales@palmtrade.eg",
+  linkedin: "", instagram: "", facebook: "", // paste profile links here and the icons appear in the footer
   partners: ["img/partners/1.png", "img/partners/2.png", "img/partners/3.png"],
 };
 
 const DICT = {
   en: {
+    ft1_eye: "Services", ft1_h: "When the catalogue is not enough", ft1_p: "Custom parts, branded workwear, stock managed on your site or a product brought in from abroad. Our team handles the work around the product too.", ft1_card: "See how we can help",
+    ft2_eye: "Specialists", ft2_h: "Talk to someone who knows your sector", ft2_p: "Safety, hospitality, construction and public sector buyers each have their own rules. We match you with a specialist who speaks your language.", ft2_card: "Choose your specialist",
     lang: "العربية", all_products: "All Products", search_ph: "Search products, sizes or standards (e.g. M10 bolt, nitrile gloves)", search_btn: "Search",
     quote_list: "Quote list", request_quote: "Request a quotation", home: "Home", departments: "Departments", shop_all: "Shop all",
     hero_t: "Everything your business runs on, supplied.", hero_p: "Fasteners, safety, cleaning, electrical, tools, uniforms and more. Build a list, send it, and get a full quotation within 24 hours.",
@@ -28,6 +31,8 @@ const DICT = {
     f_tag: "General Supplies | Procurement | Import & Export", other_item: "Add an item that is not listed", other_ph: "Describe the item, size and quantity", add: "Add",
   },
   ar: {
+    ft1_eye: "الخدمات", ft1_h: "عندما لا يكفي الكتالوج", ft1_p: "قطع حسب الطلب، وزي عمل بشعارك، ومخزون ندير توفره في موقعك، أو منتج نستورده من الخارج. فريقنا يتولى العمل المحيط بالمنتج أيضا.", ft1_card: "اعرف كيف نساعدك",
+    ft2_eye: "المتخصصون", ft2_h: "تحدث مع من يعرف قطاعك", ft2_p: "مشترو السلامة والفنادق والمقاولات والجهات الحكومية لكل منهم قواعده. نربطك بمتخصص يفهم احتياجك.", ft2_card: "اختر المتخصص",
     lang: "English", all_products: "كل المنتجات", search_ph: "ابحث عن منتج أو مقاس أو مواصفة (مثال: مسمار M10، جوانتي نيتريل)", search_btn: "بحث",
     quote_list: "قائمة العرض", request_quote: "اطلب عرض سعر", home: "الرئيسية", departments: "الأقسام", shop_all: "عرض الكل",
     hero_t: "كل ما يحتاجه عملك، نوفره لك.", hero_p: "مسامير، سلامة، نظافة، كهرباء، عدد، زي موحد والمزيد. جهز قائمتك وأرسلها واستلم عرض سعر كامل خلال 24 ساعة.",
@@ -106,6 +111,10 @@ const Site = {
     await this.rest("leads", { method: "POST", body: JSON.stringify({ party_id: pid, contact_name: f.name, company_name: f.company || null, phone: f.phone, email: f.email || null, source: "website", stage: "new", need_description: need, estimated_qty: items.length ? items.length + " items" : null }) });
   },
 
+  async lead(source, f, message) {
+    await this.rest("leads", { method: "POST", body: JSON.stringify({ contact_name: f.name || f.email || null, company_name: f.company || null, phone: f.phone || null, email: f.email || null, source, stage: "new", need_description: message || null }) });
+  },
+  tx(o) { return o ? o[this.lang] || o.en : ""; },
   /* ---------- layout ---------- */
   header() {
     return `<a class="skip" href="#main">Skip to content</a>
@@ -118,19 +127,40 @@ const Site = {
         <a class="qlink" href="quote.html">${icon("quote", 22)}<span class="lbl" data-t="quote_list"></span><span class="count" id="qcount">0</span></a>
       </nav>
     </div>
+    <nav class="subnav" aria-label="Company"><div class="subnav-in" id="subnav">${this.subnav()}</div></nav>
     <div class="mega" id="mega" hidden><div class="mega-in"><ul class="mega-deps" id="megadeps"></ul><div class="mega-cats" id="megacats"></div></div></div>
     </header>`;
   },
+  subnav() {
+    const P = window.PAGES || {}; const cur = document.body ? document.body.dataset.page : "";
+    const dd = (k, items) => `<div class="dd"><a href="${k}.html" class="${cur === k ? "on" : ""}" aria-haspopup="true">${this.esc(this.tx(P[k] && P[k].title))}<svg width="10" height="10" viewBox="0 0 10 10" aria-hidden="true"><path d="M2 3.5l3 3 3-3" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></a><div class="dd-menu">${items.map(([id, l]) => `<a href="${k}.html#${id}">${this.esc(this.tx(l))}</a>`).join("")}</div></div>`;
+    const links = (window.NAV_PAGES || []).map(([k, l]) => k === "services" ? dd("services", window.NAV_SERVICES || []) : k === "industries" ? dd("industries", ((P.industries && P.industries.industries) || []).map((x) => [x.id, x.h])) : `<a href="${k}.html" class="${cur === k ? "on" : ""}">${this.esc(this.tx(l))}</a>`).join("");
+    const tools = `<span class="sn-tools"><a href="coverage.html">${icon("truck", 18)}<span>${this.lang === "ar" ? "مناطق التوصيل" : "Delivery areas"}</span></a><a href="orders.html">${icon("box", 18)}<span>${this.lang === "ar" ? "تتبع طلب" : "Track order"}</span></a></span>`;
+    return links + tools;
+  },
+  blogStrip() {
+    const posts = (window.POSTS || []).slice(0, 3); if (!posts.length || (document.body && /^blog/.test(document.body.dataset.page || ""))) return "";
+    return `<section class="blogstrip"><div class="wrap"><div class="sec-head"><h2>${this.lang === "ar" ? "من المدونة" : "From the blog"}</h2><a class="more" href="blog.html">${this.lang === "ar" ? "كل المقالات" : "All articles"} ›</a></div><div class="bgrid">${posts.map((p) => this.postCard(p)).join("")}</div></div></section>`;
+  },
+  postCard(p) {
+    const d = new Date(p.date + "T00:00:00").toLocaleDateString(this.lang === "ar" ? "ar-EG" : "en-GB", { day: "numeric", month: "long", year: "numeric" });
+    return `<article class="bcard"><a class="bcard-img" href="blog-${p.slug}.html" tabindex="-1" aria-hidden="true"><img src="${p.img}" alt="" loading="lazy" /></a><div class="bcard-body"><time datetime="${p.date}">${d}</time><h3><a href="blog-${p.slug}.html">${this.esc(this.tx(p.title))}</a></h3><p>${this.esc(this.tx(p.excerpt))}</p></div></article>`;
+  },
   crumbs(items) { return `<nav class="crumbs" aria-label="Breadcrumb"><a href="index.html">${this.t("home")}</a>${items.map((x) => `<span aria-hidden="true">›</span>${x.href ? `<a href="${x.href}">${this.esc(x.label)}</a>` : `<span>${this.esc(x.label)}</span>`}`).join("")}</nav>`; },
   footer() {
-    const wa = PALM.phone.replace(/[^\d]/g, "");
-    return `<section class="help"><div class="wrap help-in"><div><h2 data-t="cant_find"></h2><p data-t="cant_find_p"></p></div><div class="help-act"><a class="btn dark" href="quote.html#other" data-t="tell_us"></a><a class="btn wa" href="https://wa.me/${wa}">WhatsApp</a></div></div></section>
+    const wa = PALM.phone.replace(/[^\d]/g, ""); const ar = this.lang === "ar";
+    const P = window.PAGES || {};
+    const cols = (window.FOOT || []).map(([h, ls]) => `<div><h3>${this.esc(this.tx(h))}</h3>${ls.map(([k, l]) => `<a href="${k}.html">${this.esc(this.tx(l))}</a>`).join("")}</div>`).join("");
+    const soc = [["LinkedIn", PALM.linkedin, '<path d="M6 9h4v12H6zM8 3a2 2 0 110 4 2 2 0 010-4zM13 9h4v2c1-1.5 2.5-2.3 4.5-2.3 3 0 4.5 2 4.5 5.8V21h-4v-6c0-1.8-.6-3-2.2-3-1.5 0-2.8 1-2.8 3v6h-4z" transform="scale(.9)"/>'], ["Instagram", PALM.instagram, '<rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="17.5" cy="6.5" r="1.2"/>'], ["Facebook", PALM.facebook, '<path d="M14 8h3V4h-3c-2.8 0-4 1.8-4 4.3V11H7v4h3v8h4v-8h3l1-4h-4V8.6c0-.4.3-.6.6-.6z"/>'], ["WhatsApp", "https://wa.me/" + wa, '<path d="M12 3a9 9 0 00-7.8 13.5L3 21l4.6-1.2A9 9 0 1012 3zm4.7 12.6c-.2.6-1.2 1.1-1.7 1.2-.5.1-1 .1-1.6-.1-.4-.1-.9-.3-1.5-.6-2.6-1.1-4.3-3.8-4.4-4-.1-.2-1-1.4-1-2.6s.6-1.8.9-2.1c.2-.2.5-.3.6-.3h.5c.1 0 .4 0 .6.4l.8 1.9c.1.1.1.3 0 .5l-.3.5-.4.4c-.1.1-.3.3-.1.6.2.3.7 1.2 1.6 1.9 1.1 1 2 1.3 2.3 1.4.3.1.4.1.6-.1l.8-1c.2-.3.4-.2.6-.1l1.8.9c.3.1.4.2.5.3.1.2.1.7-.1 1.3z"/>']].filter((x) => x[1]).map(([n, u, d]) => `<a href="${u}" aria-label="${n}" rel="noopener"><svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">${d}</svg></a>`).join("");
+    return `${this.blogStrip()}<section class="help"><div class="wrap help-in"><div><h2 data-t="cant_find"></h2><p data-t="cant_find_p"></p></div><div class="help-act"><a class="btn dark" href="quote.html#other" data-t="tell_us"></a><a class="btn wa" href="https://wa.me/${wa}">WhatsApp</a></div></div></section>
     <footer class="foot"><div class="wrap foot-in">
-      <div class="fbrand"><img src="img/emblem.png" alt="" /><span>PALM GENERAL SUPPLY</span><p data-t="f_tag"></p></div>
-      <div><h3 data-t="f_pages"></h3><div id="footdeps"></div></div>
-      <div><h3 data-t="f_contact"></h3><p dir="ltr">${PALM.phone}</p><a href="https://wa.me/${wa}">WhatsApp</a><p>${PALM.email}</p></div>
-      <div><h3 data-t="f_more"></h3><a href="quote.html" data-t="request_quote"></a><a href="#">LinkedIn</a><a href="#">Instagram</a></div>
-    </div><div class="wrap foot-bot">© ${new Date().getFullYear()} Palm General Supply</div></footer>`;
+      <div class="fbrand"><img src="img/emblem.png" alt="" /><span>PALM GENERAL SUPPLY</span><p data-t="f_tag"></p>
+        <form class="news" id="newsform"><label for="newsemail">${ar ? "اشترك في النشرة لتصلك العروض والمقالات الجديدة" : "Get new offers and articles by email"}</label><div class="news-row"><input id="newsemail" name="email" type="email" required dir="ltr" placeholder="name@company.com" /><button class="btn light sm" type="submit">${ar ? "اشترك" : "Sign up"}</button></div><p class="news-msg" id="newsmsg" role="status"></p></form>
+        <div class="social">${soc}</div>
+        <p class="fcontact"><a href="tel:${PALM.phone.replace(/\s/g, "")}" dir="ltr">${PALM.phone}</a> · <a href="mailto:${PALM.email}">${PALM.email}</a></p></div>
+      <div><h3 data-t="f_pages"></h3><div id="footdeps"></div><a href="catalog.html">${ar ? "كل المنتجات" : "All products"} ›</a></div>
+      ${cols}
+    </div><div class="wrap foot-bot"><span>© ${new Date().getFullYear()} Palm General Supply</span><span>${(window.NAV_PAGES || []).slice(0, 2).map(([k, l]) => `<a href="${k}.html">${this.esc(this.tx(l))}</a>`).join(" · ")}</span></div></footer>`;
   },
   async renderHeaderDynamic() {
     const c = document.getElementById("qcount"); if (c) { const n = this.list().length; c.textContent = n; c.hidden = !n; }
@@ -147,9 +177,10 @@ const Site = {
   /* product card used on home and catalogue */
   card(p, deps, mode) {
     const name = this.pick(p, "name"); const img = p.images && p.images[0];
-    const specs = (p.specs || []).slice(0, mode === "list" ? 4 : 2).map((s) => `<li><span>${this.esc(this.lang === "ar" ? s.k_ar : s.k_en)}</span><b>${this.esc(this.lang === "ar" ? s.v_ar : s.v_en)}</b></li>`).join("");
+    const nSpec = mode === "list" ? 4 : 2; const sl = (p.specs || []).slice(0, nSpec);
+    const specs = sl.map((s) => `<li title="${this.esc(this.lang === "ar" ? s.v_ar : s.v_en)}"><span>${this.esc(this.lang === "ar" ? s.k_ar : s.k_en)}</span><b>${this.esc(this.lang === "ar" ? s.v_ar : s.v_en)}</b></li>`).join("") + "<li></li>".repeat(Math.max(0, nSpec - sl.length));
     return `<article class="pc ${mode || ""}"><a class="pc-img" href="product.html?id=${p.id}" aria-hidden="true" tabindex="-1">${img ? `<img src="${this.esc(img)}" alt="" loading="lazy" />` : icon(p.category_icon || p.sector_icon || "box", 64)}</a>
-      <div class="pc-body"><div class="pc-cat">${this.esc(this.pick(p, "category"))}</div><h3><a href="product.html?id=${p.id}">${this.esc(name)}</a></h3><ul class="pc-specs">${specs}</ul>
+      <div class="pc-body"><div class="pc-cat">${this.esc(this.pick(p, "category"))}</div><h3 title="${this.esc(name)}"><a href="product.html?id=${p.id}">${this.esc(name)}</a></h3><ul class="pc-specs">${specs}</ul>
       <div class="pc-foot"><span class="pc-unit">${this.t("unit")}: ${this.esc(this.unit(p.unit))}</span><button class="btn sm" data-add="${p.id}">${icon("quote", 16)}<span>${this.t("add_quote")}</span></button></div></div></article>`;
   },
   bindAdd(root, rows) {
@@ -169,6 +200,10 @@ document.addEventListener("DOMContentLoaded", () => {
   document.addEventListener("keydown", (e) => { if (e.key === "Escape") setMega(false); });
   document.addEventListener("click", (e) => { if (!mega.hidden && !e.target.closest("#mega") && !e.target.closest("#allbtn")) setMega(false); });
   document.querySelectorAll("[data-lang-toggle]").forEach((b) => b.addEventListener("click", () => Site.setLang(Site.lang === "ar" ? "en" : "ar")));
+  const bindNews = () => { const nf = document.getElementById("newsform"); if (!nf) return; nf.onsubmit = async (e) => { e.preventDefault(); const m = document.getElementById("newsmsg"); const b = nf.querySelector("button"); b.disabled = true;
+    try { await Site.lead("newsletter", { email: nf.email.value }, "Newsletter sign-up"); nf.reset(); m.textContent = Site.lang === "ar" ? "تم الاشتراك، شكرا لك." : "You are signed up. Thank you."; } catch (err) { m.textContent = Site.lang === "ar" ? "تعذر الاشتراك، حاول مرة أخرى." : "Could not sign up, please try again."; } b.disabled = false; }; };
+  bindNews();
+  document.addEventListener("langchange", () => { const sn = document.getElementById("subnav"); if (sn) sn.innerHTML = Site.subnav(); const oldF = document.querySelectorAll(".blogstrip, section.help, footer.foot"); oldF.forEach((x) => x.remove()); document.body.insertAdjacentHTML("beforeend", Site.footer()); Site.apply(); bindNews(); Site.renderHeaderDynamic(); });
   Site.apply();
   if (window.PAGE) window.PAGE();
 });
