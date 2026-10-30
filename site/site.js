@@ -11,6 +11,7 @@ window.PALM = {
 
 const DICT = {
   en: {
+    up_t: "Have a tender or RFQ document?", up_p: "Upload your procurement list, BOQ, tender or RFQ file and we will price every line. PDF, Word, Excel, CSV or photos, up to 5 files of 15 MB each.", up_btn: "Choose files", up_hint: "or drag and drop them here", up_bad: "This file type or size is not accepted:", up_sending: "Uploading your documents...",
     ft1_eye: "Services", ft1_h: "When the catalogue is not enough", ft1_p: "Custom parts, branded workwear, stock managed on your site or a product brought in from abroad. Our team handles the work around the product too.", ft1_card: "See how we can help",
     ft2_eye: "Specialists", ft2_h: "Talk to someone who knows your sector", ft2_p: "Safety, hospitality, construction and public sector buyers each have their own rules. We match you with a specialist who speaks your language.", ft2_card: "Choose your specialist",
     lang: "العربية", all_products: "All Products", search_ph: "Search products, sizes or standards (e.g. M10 bolt, nitrile gloves)", search_btn: "Search",
@@ -24,19 +25,20 @@ const DICT = {
     grid: "Grid", list: "List", view: "View", add_quote: "Add to quote", added: "Added", details: "Details", options: "options", no_results: "No products match. Try fewer filters or a different word.",
     specs: "Specifications", choose: "Choose options", qty: "Quantity", unit: "Unit", add_to_list: "Add to quote list", request_now: "Request quotation now", whatsapp: "WhatsApp us",
     related: "More in this category", price_note: "Prices depend on quantity, options and delivery. You will receive a full quotation within 24 hours.", sku: "Item", description: "Description",
-    q_title: "Request a quotation", q_p: "Send your list and we will reply with a priced quotation within 24 hours.", q_empty: "Your quote list is empty.", q_browse: "Browse products",
+    q_title: "Request a quotation", q_p: "Send your list, or upload your tender or RFQ document, and we will reply with a priced quotation within 24 hours.", q_empty: "Your quote list is empty.", q_browse: "Browse products",
     q_items: "Items in your list", remove: "Remove", fm_company: "Company", fm_name: "Your name", fm_phone: "Phone / WhatsApp", fm_email: "Email", fm_notes: "Anything else we should know (delivery city, deadline, branding)",
     fm_send: "Send request", fm_ok: "Thank you. Your request has reached our team and you will hear from us within 24 hours.", fm_bad: "Something went wrong. Please try again or call us.",
     c_call: "Call", c_wa: "WhatsApp", c_mail: "Email", loading: "Loading...", f_pages: "Shop", f_contact: "Contact", f_more: "Company",
     f_tag: "General Supplies | Procurement | Import & Export", other_item: "Add an item that is not listed", other_ph: "Describe the item, size and quantity", add: "Add",
   },
   ar: {
+    up_t: "لديك كراسة شروط أو طلب تسعير؟", up_p: "ارفع قائمة المشتريات أو المقايسة أو كراسة المناقصة أو طلب التسعير وسنسعر كل بند. PDF أو Word أو Excel أو CSV أو صور، حتى 5 ملفات بحد 15 ميجا للملف.", up_btn: "اختر الملفات", up_hint: "أو اسحبها وأفلتها هنا", up_bad: "نوع أو حجم هذا الملف غير مقبول:", up_sending: "جار رفع المستندات...",
     ft1_eye: "الخدمات", ft1_h: "عندما لا يكفي الكتالوج", ft1_p: "قطع حسب الطلب، وزي عمل بشعارك، ومخزون ندير توفره في موقعك، أو منتج نستورده من الخارج. فريقنا يتولى العمل المحيط بالمنتج أيضا.", ft1_card: "اعرف كيف نساعدك",
     ft2_eye: "المتخصصون", ft2_h: "تحدث مع من يعرف قطاعك", ft2_p: "مشترو السلامة والفنادق والمقاولات والجهات الحكومية لكل منهم قواعده. نربطك بمتخصص يفهم احتياجك.", ft2_card: "اختر المتخصص",
     lang: "English", all_products: "كل المنتجات", search_ph: "ابحث عن منتج أو مقاس أو مواصفة (مثال: مسمار M10، جوانتي نيتريل)", search_btn: "بحث",
     quote_list: "قائمة العرض", request_quote: "اطلب عرض سعر", home: "الرئيسية", departments: "الأقسام", shop_all: "عرض الكل",
     hero_t: "كل ما يحتاجه عملك، نوفره لك.", hero_p: "مسامير، سلامة، نظافة، كهرباء، عدد، زي موحد والمزيد. جهز قائمتك وأرسلها واستلم عرض سعر كامل خلال 24 ساعة.",
-    hero_k1: "منتج في الكتالوج", hero_k2: "قسم", hero_k3: "وقت تجهيز العرض", hero_k3v: "24 ساعة",
+    hero_k1: "منتج في الكتالوج", hero_k2: "قسم", hero_k3: "وقت تجهيز العرض", hero_k3v: "٢٤ ساعة",
     shop_by: "تسوق حسب القسم", on_request: "حسب الطلب", products: "منتج", items: "صنف", categories: "الفئات",
     how_t: "كيف تطلب", how1t: "جهز قائمتك", how1p: "أضف المنتجات بالمقاس والتشطيب والكمية المطلوبة بالضبط.", how2t: "أرسل طلبا واحدا", how2p: "تصل قائمتك كاملة لفريقنا في رسالة واحدة.", how3t: "استلم عرض السعر", how3p: "مسعر ومفصل لكل بند خلال 24 ساعة.",
     partners: "عملاؤنا وشركاؤنا", cant_find: "لم تجد ما تبحث عنه؟", cant_find_p: "نوفر ما هو أبعد من هذا الكتالوج. أخبرنا بما تحتاجه وسنسعره لك.", tell_us: "أخبرنا بما تحتاجه",
@@ -44,7 +46,7 @@ const DICT = {
     grid: "شبكة", list: "قائمة", view: "العرض", add_quote: "أضف للعرض", added: "تمت الإضافة", details: "التفاصيل", options: "خيارات", no_results: "لا توجد منتجات مطابقة. جرب تصفية أقل أو كلمة أخرى.",
     specs: "المواصفات", choose: "اختر المواصفات", qty: "الكمية", unit: "الوحدة", add_to_list: "أضف لقائمة العرض", request_now: "اطلب عرض سعر الآن", whatsapp: "راسلنا واتساب",
     related: "المزيد في هذه الفئة", price_note: "الأسعار تعتمد على الكمية والمواصفات والتوصيل. ستستلم عرض سعر كامل خلال 24 ساعة.", sku: "الصنف", description: "الوصف",
-    q_title: "اطلب عرض سعر", q_p: "أرسل قائمتك وسنرد بعرض سعر مفصل خلال 24 ساعة.", q_empty: "قائمة العرض فارغة.", q_browse: "تصفح المنتجات",
+    q_title: "اطلب عرض سعر", q_p: "أرسل قائمتك أو ارفع كراسة الشروط أو طلب التسعير، وسنرد بعرض سعر مفصل خلال 24 ساعة.", q_empty: "قائمة العرض فارغة.", q_browse: "تصفح المنتجات",
     q_items: "الأصناف في قائمتك", remove: "حذف", fm_company: "الشركة", fm_name: "الاسم", fm_phone: "الهاتف / واتساب", fm_email: "البريد الإلكتروني", fm_notes: "أي تفاصيل أخرى (مدينة التوصيل، الموعد، الشعار)",
     fm_send: "أرسل الطلب", fm_ok: "شكرا لك. وصل طلبك لفريقنا وسنتواصل معك خلال 24 ساعة.", fm_bad: "حدث خطأ. حاول مرة أخرى أو اتصل بنا.",
     c_call: "اتصل", c_wa: "واتساب", c_mail: "البريد", loading: "جار التحميل...", f_pages: "التسوق", f_contact: "تواصل معنا", f_more: "الشركة",
@@ -83,7 +85,14 @@ const Site = {
     return d;
   },
   departments() { return this.cached("deps", "public_departments?select=*&order=sort_order"); },
-  async catalogue() { const deps = await this.departments(); const codes = new Set(deps.map((d) => d.code)); const rows = await this.cached("cat", "public_catalogue?select=*&order=sector_sort,category_sort,name_en"); return rows.filter((r) => codes.has(r.sector_code)); },
+  async catalogue() { const deps = await this.departments(); const codes = new Set(deps.map((d) => d.code)); const rows = (await this.cached("cat", "public_catalogue?select=*&order=sector_sort,category_sort,name_en")).filter((r) => codes.has(r.sector_code));
+    const ph = { dep: {}, cat: {} }; for (const r of rows) { const im = r.images && r.images[0]; if (!im) continue; if (!ph.cat[r.category_id]) ph.cat[r.category_id] = im; if (!ph.dep[r.sector_code]) ph.dep[r.sector_code] = im; }
+    for (const d of deps) if (!ph.dep[d.code] && d.image_url) ph.dep[d.code] = d.image_url; this._ph = ph; return rows; },
+  /** photo for a product: its own, else its category's, else its department's */
+  photo(p) { const ph = this._ph || { dep: {}, cat: {} }; return (p.images && p.images[0]) || ph.cat[p.category_id] || ph.dep[p.sector_code] || ""; },
+  thumb(u, w) { w = w || 400; return /images\.unsplash\.com/.test(u) ? u.replace(/([?&])w=\d+/, "$1w=" + w) : u; },
+  depPhoto(code) { return ((this._ph || {}).dep || {})[code] || ""; },
+  catPhoto(id) { return ((this._ph || {}).cat || {})[id] || ""; },
   options(ids) { return this.rest("public_product_options?select=*&order=attribute_sort,option_sort" + (ids ? "&product_id=in.(" + ids.join(",") + ")" : "")); },
   groupOptions(rows, pid) {
     const m = new Map(); (rows || []).filter((r) => r.product_id === pid).forEach((r) => { if (!m.has(r.attribute_id)) m.set(r.attribute_id, { id: r.attribute_id, row: r, options: [] }); m.get(r.attribute_id).options.push(r); });
@@ -101,14 +110,22 @@ const Site = {
   toast(msg) { let el = document.getElementById("toast"); if (!el) { el = document.createElement("div"); el.id = "toast"; el.className = "toast"; el.setAttribute("role", "status"); document.body.appendChild(el); } el.textContent = msg; el.classList.add("on"); clearTimeout(this._tt); this._tt = setTimeout(() => el.classList.remove("on"), 2400); },
 
   /* ---------- quotation request -> Palm OS lead ---------- */
-  async submitRequest(f, items) {
+  async uploadDoc(file) {
+    const safe = file.name.normalize("NFKD").replace(/[^\w.\-]+/g, "_").slice(-80) || "document";
+    const path = "incoming/" + crypto.randomUUID() + "/" + safe;
+    const r = await fetch(PALM.supabaseUrl + "/storage/v1/object/rfq-docs/" + path, { method: "POST", headers: { apikey: PALM.supabaseAnonKey, Authorization: "Bearer " + PALM.supabaseAnonKey, "content-type": file.type || "application/octet-stream", "x-upsert": "false" }, body: file });
+    if (!r.ok) throw new Error("upload failed");
+    return { path, name: file.name, size: file.size, type: file.type };
+  },
+  async submitRequest(f, items, attachments) {
+    attachments = attachments || [];
     const pid = crypto.randomUUID();
     const lines = items.map((x, i) => (i + 1) + ". " + x.name_en + (x.opts_text_en ? " (" + x.opts_text_en + ")" : "") + " x " + x.qty + " " + (x.unit || "")).join("\n");
     const need = (lines ? lines + "\n\n" : "") + (f.notes || "");
     await this.rest("parties", { method: "POST", body: JSON.stringify({ id: pid, name_ar: f.company || f.name, name_en: f.company || f.name, status: "draft", sector: [], preferred_language: this.lang, notes: need }) });
     await this.rest("party_roles", { method: "POST", body: JSON.stringify({ party_id: pid, role: "client" }) });
     await this.rest("contacts", { method: "POST", body: JSON.stringify({ party_id: pid, name: f.name, phone: f.phone, whatsapp: f.phone, email: f.email || null, language: this.lang, is_primary: true }) });
-    await this.rest("leads", { method: "POST", body: JSON.stringify({ party_id: pid, contact_name: f.name, company_name: f.company || null, phone: f.phone, email: f.email || null, source: "website", stage: "new", need_description: need, estimated_qty: items.length ? items.length + " items" : null }) });
+    await this.rest("leads", { method: "POST", body: JSON.stringify({ party_id: pid, contact_name: f.name, company_name: f.company || null, phone: f.phone, email: f.email || null, source: "website", stage: "new", need_description: need + (attachments.length ? "\n\nAttached documents: " + attachments.map((a) => a.name).join(", ") : ""), estimated_qty: items.length ? items.length + " items" : null, attachments }) });
   },
 
   async lead(source, f, message) {
@@ -165,10 +182,11 @@ const Site = {
   async renderHeaderDynamic() {
     const c = document.getElementById("qcount"); if (c) { const n = this.list().length; c.textContent = n; c.hidden = !n; }
     let deps; try { deps = await this.departments(); } catch (e) { return; }
+    try { await this.catalogue(); } catch (e) {}
     const md = document.getElementById("megadeps"); const fd = document.getElementById("footdeps");
     if (md) {
-      md.innerHTML = deps.map((d, i) => `<li><a href="catalog.html?d=${d.code}" data-dep="${d.code}" class="${i === 0 ? "on" : ""}">${icon(d.icon || "box", 22)}<span>${this.esc(this.pick(d, "name"))}</span><span class="n">${d.product_count ? this.num(d.product_count) : this.t("on_request")}</span></a></li>`).join("");
-      const showCats = (code) => { const d = deps.find((x) => x.code === code); md.querySelectorAll("a").forEach((a) => a.classList.toggle("on", a.dataset.dep === code)); document.getElementById("megacats").innerHTML = `<h3><a href="catalog.html?d=${d.code}">${this.esc(this.pick(d, "name"))} <span>${this.t("shop_all")} ›</span></a></h3><p>${this.esc(this.pick(d, "blurb"))}</p><div class="mc-grid">${(d.categories || []).map((c) => `<a href="catalog.html?d=${d.code}&c=${c.id}">${icon(c.icon || d.icon, 30)}<span>${this.esc(this.pick(c, "name"))}</span></a>`).join("")}</div>`; };
+      md.innerHTML = deps.map((d, i) => `<li><a href="catalog.html?d=${d.code}" data-dep="${d.code}" class="${i === 0 ? "on" : ""}">${this.depPhoto(d.code) ? `<img class="md-img" src="${this.esc(this.thumb(this.depPhoto(d.code), 120))}" alt="" loading="lazy" />` : icon(d.icon || "box", 22)}<span>${this.esc(this.pick(d, "name"))}</span><span class="n">${d.product_count ? this.num(d.product_count) : this.t("on_request")}</span></a></li>`).join("");
+      const showCats = (code) => { const d = deps.find((x) => x.code === code); md.querySelectorAll("a").forEach((a) => a.classList.toggle("on", a.dataset.dep === code)); document.getElementById("megacats").innerHTML = `<h3><a href="catalog.html?d=${d.code}">${this.esc(this.pick(d, "name"))} <span>${this.t("shop_all")} ›</span></a></h3><p>${this.esc(this.pick(d, "blurb"))}</p><div class="mc-grid">${(d.categories || []).map((c) => `<a href="catalog.html?d=${d.code}&c=${c.id}">${this.catPhoto(c.id) ? `<img src="${this.esc(this.thumb(this.catPhoto(c.id)))}" alt="" loading="lazy" />` : icon(c.icon || d.icon, 30)}<span>${this.esc(this.pick(c, "name"))}</span></a>`).join("")}</div>`; };
       md.querySelectorAll("a").forEach((a) => { a.addEventListener("mouseenter", () => showCats(a.dataset.dep)); a.addEventListener("focus", () => showCats(a.dataset.dep)); });
       if (deps[0]) showCats(deps[0].code);
     }
@@ -176,7 +194,7 @@ const Site = {
   },
   /* product card used on home and catalogue */
   card(p, deps, mode) {
-    const name = this.pick(p, "name"); const img = p.images && p.images[0];
+    const name = this.pick(p, "name"); const img = this.photo(p);
     const nSpec = mode === "list" ? 4 : 2; const sl = (p.specs || []).slice(0, nSpec);
     const specs = sl.map((s) => `<li title="${this.esc(this.lang === "ar" ? s.v_ar : s.v_en)}"><span>${this.esc(this.lang === "ar" ? s.k_ar : s.k_en)}</span><b>${this.esc(this.lang === "ar" ? s.v_ar : s.v_en)}</b></li>`).join("") + "<li></li>".repeat(Math.max(0, nSpec - sl.length));
     return `<article class="pc ${mode || ""}"><a class="pc-img" href="product.html?id=${p.id}" aria-hidden="true" tabindex="-1">${img ? `<img src="${this.esc(img)}" alt="" loading="lazy" />` : icon(p.category_icon || p.sector_icon || "box", 64)}</a>
@@ -184,7 +202,7 @@ const Site = {
       <div class="pc-foot"><span class="pc-unit">${this.t("unit")}: ${this.esc(this.unit(p.unit))}</span><button class="btn sm" data-add="${p.id}">${icon("quote", 16)}<span>${this.t("add_quote")}</span></button></div></div></article>`;
   },
   bindAdd(root, rows) {
-    root.querySelectorAll("[data-add]").forEach((b) => b.onclick = () => { const p = rows.find((x) => x.id === b.dataset.add); if (p) this.addToList({ id: p.id, name_en: p.name_en, name_ar: p.name_ar, unit: p.unit, qty: 1, opts: [], opts_text_en: "", opts_text_ar: "", icon: p.category_icon }); b.classList.add("ok"); setTimeout(() => b.classList.remove("ok"), 1500); });
+    root.querySelectorAll("[data-add]").forEach((b) => b.onclick = () => { const p = rows.find((x) => x.id === b.dataset.add); if (p) this.addToList({ id: p.id, name_en: p.name_en, name_ar: p.name_ar, unit: p.unit, qty: 1, opts: [], opts_text_en: "", opts_text_ar: "", icon: p.category_icon, img: this.photo(p) }); b.classList.add("ok"); setTimeout(() => b.classList.remove("ok"), 1500); });
   },
 };
 window.Site = Site;

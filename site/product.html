@@ -29,7 +29,7 @@ window.PAGE = async function () {
   const chosen = (lang) => attrs.map((a) => { const o = a.options.find((x) => x.option_id === sel[a.id]); return (lang === "ar" ? a.row.attribute_ar : a.row.attribute_en) + ": " + (lang === "ar" ? o.option_ar : o.option_en); }).join(", ");
   const draw = () => {
     const name = Site.pick(p, "name"); document.title = name + " | Palm General Supply";
-    const img = p.images && p.images[0];
+    const img = Site.photo(p);
     const related = rows.filter((x) => x.category_id === p.category_id && x.id !== p.id).slice(0, 4);
     main.innerHTML = Site.crumbs([{ label: Site.t("all_products"), href: "catalog.html" }, { label: Site.pick(dep, "name"), href: "catalog.html?d=" + p.sector_code }, { label: Site.pick(p, "category"), href: "catalog.html?d=" + p.sector_code + "&c=" + p.category_id }, { label: name }]) +
       '<div class="prod"><div class="prod-media">' + (img ? '<img src="' + Site.esc(img) + '" alt="' + Site.esc(name) + '" />' : '<div class="prod-ico">' + icon(p.category_icon || p.sector_icon, 180) + '</div>') + '</div>' +
@@ -44,7 +44,7 @@ window.PAGE = async function () {
     main.querySelectorAll("[data-o]").forEach((b) => b.onclick = () => { sel[b.dataset.a] = b.dataset.o; draw(); });
     main.querySelectorAll("[data-q]").forEach((b) => b.onclick = () => { qty = Math.max(1, qty + Number(b.dataset.q)); draw(); });
     const qi = document.getElementById("qty"); qi.onchange = () => { qty = Math.max(1, parseInt(qi.value || "1", 10)); draw(); };
-    const add = () => Site.addToList({ id: p.id, name_en: p.name_en, name_ar: p.name_ar, unit: p.unit, qty, opts: attrs.map((a) => sel[a.id]), opts_text_en: chosen("en"), opts_text_ar: chosen("ar"), icon: p.category_icon });
+    const add = () => Site.addToList({ id: p.id, name_en: p.name_en, name_ar: p.name_ar, unit: p.unit, qty, opts: attrs.map((a) => sel[a.id]), opts_text_en: chosen("en"), opts_text_ar: chosen("ar"), icon: p.category_icon, img: Site.photo(p) });
     document.getElementById("addlist").onclick = add;
     document.getElementById("reqnow").onclick = (e) => { e.preventDefault(); add(); location.href = "quote.html"; };
     Site.bindAdd(main.querySelector(".sec") || document.createElement("div"), rows);

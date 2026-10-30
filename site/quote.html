@@ -28,6 +28,9 @@
       <label><span data-t="fm_name"></span><input name="name" required autocomplete="name" /></label>
       <label><span data-t="fm_phone"></span><input name="phone" required dir="ltr" inputmode="tel" autocomplete="tel" /></label>
       <label><span data-t="fm_email"></span><input name="email" type="email" dir="ltr" autocomplete="email" /></label>
+      <div class="upl"><span class="fh" data-t="up_t"></span><p class="muted small" data-t="up_p"></p>
+        <label class="drop" id="drop"><input type="file" id="files" multiple accept=".pdf,.doc,.docx,.xls,.xlsx,.csv,.jpg,.jpeg,.png,.webp" /><b data-t="up_btn"></b><span data-t="up_hint"></span></label>
+        <ul class="flist" id="flist"></ul></div>
       <label><span data-t="fm_notes"></span><textarea name="notes" rows="3"></textarea></label>
       <button class="btn dark big" type="submit" data-t="fm_send"></button>
       <div id="msg" class="msg" role="status" hidden></div>
@@ -41,16 +44,30 @@ window.PAGE = function () {
   const draw = () => {
     document.getElementById("crumbs").innerHTML = Site.crumbs([{ label: Site.t("q_title") }]);
     const l = Site.list();
-    document.getElementById("items").innerHTML = l.length ? '<ul class="qitems">' + l.map((x, i) => '<li><span class="qi-ico">' + icon(x.icon || "box", 36) + '</span><div class="qi-main"><b>' + Site.esc(Site.lang === "ar" ? x.name_ar : x.name_en) + '</b><small>' + Site.esc(Site.lang === "ar" ? x.opts_text_ar : x.opts_text_en) + '</small></div><input type="number" min="1" value="' + x.qty + '" data-i="' + i + '" aria-label="' + Site.t("qty") + '" /><span class="qi-unit">' + Site.esc(Site.unit(x.unit)) + '</span><button class="btn sm ghost" data-rm="' + i + '" aria-label="' + Site.t("remove") + '">\u2715</button></li>').join("") + '</ul>'
+    document.getElementById("items").innerHTML = l.length ? '<ul class="qitems">' + l.map((x, i) => '<li><span class="qi-ico">' + (x.img ? '<img src="' + Site.esc(Site.thumb(x.img, 160)) + '" alt="" />' : icon(x.icon || "box", 36)) + '</span><div class="qi-main"><b>' + Site.esc(Site.lang === "ar" ? x.name_ar : x.name_en) + '</b><small>' + Site.esc(Site.lang === "ar" ? x.opts_text_ar : x.opts_text_en) + '</small></div><input type="number" min="1" value="' + x.qty + '" data-i="' + i + '" aria-label="' + Site.t("qty") + '" /><span class="qi-unit">' + Site.esc(Site.unit(x.unit)) + '</span><button class="btn sm ghost" data-rm="' + i + '" aria-label="' + Site.t("remove") + '">\u2715</button></li>').join("") + '</ul>'
       : '<div class="empty">' + Site.t("q_empty") + ' <a href="catalog.html">' + Site.t("q_browse") + '</a></div>';
     document.querySelectorAll("[data-i]").forEach((inp) => inp.onchange = () => { const l2 = Site.list(); l2[inp.dataset.i].qty = Math.max(1, parseInt(inp.value || "1", 10)); Site.saveList(l2); });
     document.querySelectorAll("[data-rm]").forEach((b) => b.onclick = () => { const l2 = Site.list(); l2.splice(Number(b.dataset.rm), 1); Site.saveList(l2); draw(); });
     document.getElementById("contact").innerHTML = '<div class="crow"><span>' + Site.t("c_call") + '</span><b dir="ltr">' + PALM.phone + '</b></div><a class="crow wa" href="https://wa.me/' + wa + '"><span>' + Site.t("c_wa") + '</span><b dir="ltr">' + PALM.phone + '</b></a><div class="crow"><span>' + Site.t("c_mail") + '</span><b>' + PALM.email + '</b></div>';
   };
   document.getElementById("otheradd").onclick = () => { const v = document.getElementById("otherin").value.trim(); if (!v) return; Site.addToList({ id: "custom-" + Date.now(), name_en: v, name_ar: v, unit: "", qty: 1, opts: [], opts_text_en: "", opts_text_ar: "", icon: "box" }); document.getElementById("otherin").value = ""; draw(); };
+  let files = [];
+  const MAX = 15 * 1024 * 1024; const OK = /\.(pdf|docx?|xlsx?|csv|jpe?g|png|webp)$/i;
+  const drawFiles = () => { document.getElementById("flist").innerHTML = files.map((f, i) => '<li><span>' + Site.esc(f.name) + '</span><small>' + (f.size / 1048576).toFixed(1) + ' MB</small><button type="button" class="btn sm ghost" data-rf="' + i + '" aria-label="' + Site.t("remove") + '">\u2715</button></li>').join("");
+    document.querySelectorAll("[data-rf]").forEach((b) => b.onclick = () => { files.splice(Number(b.dataset.rf), 1); drawFiles(); }); };
+  const addFiles = (list) => { const msg = document.getElementById("msg"); msg.hidden = true;
+    for (const f of list) { if (!OK.test(f.name) || f.size > MAX) { msg.className = "msg bad"; msg.textContent = Site.t("up_bad") + " " + f.name; msg.hidden = false; continue; } if (files.length < 5) files.push(f); }
+    drawFiles(); };
+  const inp = document.getElementById("files"); inp.onchange = () => { addFiles(inp.files); inp.value = ""; };
+  const drop = document.getElementById("drop");
+  ["dragenter", "dragover"].forEach((ev) => drop.addEventListener(ev, (e) => { e.preventDefault(); drop.classList.add("over"); }));
+  ["dragleave", "drop"].forEach((ev) => drop.addEventListener(ev, (e) => { e.preventDefault(); drop.classList.remove("over"); }));
+  drop.addEventListener("drop", (e) => addFiles(e.dataTransfer.files));
   document.getElementById("qform").addEventListener("submit", async (e) => {
-    e.preventDefault(); const f = Object.fromEntries(new FormData(e.target).entries()); const msg = document.getElementById("msg"); const btn = e.target.querySelector("button[type=submit]"); btn.disabled = true;
-    try { await Site.submitRequest(f, Site.list()); msg.className = "msg ok"; msg.textContent = Site.t("fm_ok"); msg.hidden = false; e.target.reset(); Site.saveList([]); draw(); }
+    e.preventDefault(); const f = Object.fromEntries(new FormData(e.target).entries()); delete f[""]; const msg = document.getElementById("msg"); const btn = e.target.querySelector("button[type=submit]"); btn.disabled = true;
+    try { if (files.length) { msg.className = "msg"; msg.textContent = Site.t("up_sending"); msg.hidden = false; }
+      const att = []; for (const file of files) att.push(await Site.uploadDoc(file));
+      await Site.submitRequest(f, Site.list(), att); msg.className = "msg ok"; msg.textContent = Site.t("fm_ok"); msg.hidden = false; e.target.reset(); files = []; drawFiles(); Site.saveList([]); draw(); }
     catch (err) { msg.className = "msg bad"; msg.textContent = Site.t("fm_bad"); msg.hidden = false; }
     btn.disabled = false;
   });

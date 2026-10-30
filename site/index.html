@@ -37,11 +37,11 @@
 <script>
 window.PAGE = async function () {
   document.getElementById("plogos").innerHTML = PALM.partners.map((p) => '<img src="' + p + '" alt="" loading="lazy" />').join("");
-  let deps = []; try { deps = await Site.departments(); } catch (e) {}
+  let deps = []; try { deps = await Site.departments(); await Site.catalogue(); } catch (e) {}
   const draw = () => {
     const total = deps.reduce((n, d) => n + Number(d.product_count || 0), 0);
     document.getElementById("kpis").innerHTML = '<div><dt>' + Site.t("hero_k1") + '</dt><dd>' + Site.num(total) + '+</dd></div><div><dt>' + Site.t("hero_k2") + '</dt><dd>' + Site.num(deps.length) + '</dd></div><div><dt>' + Site.t("hero_k3") + '</dt><dd>' + Site.t("hero_k3v") + '</dd></div>';
-    document.getElementById("tiles").innerHTML = deps.map((d) => '<a class="tile" href="catalog.html?d=' + d.code + '"><span class="tile-ico">' + icon(d.icon || "box", 64) + '</span><span class="tile-name">' + Site.esc(Site.pick(d, "name")) + '</span><span class="tile-n">' + (d.product_count ? Site.num(d.product_count) + " " + Site.t("products") : Site.t("on_request")) + '</span></a>').join("");
+    document.getElementById("tiles").innerHTML = deps.map((d) => '<a class="tile photo" href="catalog.html?d=' + d.code + '"><span class="tile-img">' + (Site.depPhoto(d.code) ? '<img src="' + Site.esc(Site.thumb(Site.depPhoto(d.code), 500)) + '" alt="" loading="lazy" />' : icon(d.icon || "box", 64)) + '</span><span class="tile-name">' + Site.esc(Site.pick(d, "name")) + '</span><span class="tile-n">' + (d.product_count ? Site.num(d.product_count) + " " + Site.t("products") : Site.t("on_request")) + '</span></a>').join("");
   };
   draw(); document.addEventListener("langchange", draw);
 };
