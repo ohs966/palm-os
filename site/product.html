@@ -7,12 +7,13 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&family=IBM+Plex+Sans+Arabic:wght@400;500;700&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="styles.css?v=21" />
+<link rel="stylesheet" href="styles.css?v=23" />
 <link rel="icon" href="img/emblem-dark.png" />
-<script src="icons.js?v=21"></script>
-<script src="pages.js?v=21"></script>
-<script src="posts.js?v=21"></script>
-<script src="site.js?v=21"></script>
+<script src="icons.js?v=23"></script>
+<script src="pages.js?v=23"></script>
+<script src="posts.js?v=23"></script>
+<script src="guides.js?v=23"></script>
+<script src="site.js?v=23"></script>
 </head>
 <body>
 
@@ -40,6 +41,7 @@ window.PAGE = async function () {
       '<button class="btn dark big" id="addlist">' + icon("quote", 18) + ' ' + Site.t("add_to_list") + '</button><a class="btn big" id="reqnow" href="quote.html">' + Site.t("request_now") + '</a><a class="btn wa big" href="https://wa.me/' + wa + '?text=' + encodeURIComponent(p.name_en + (attrs.length ? " (" + chosen("en") + ")" : "") + " x " + qty) + '">' + Site.t("whatsapp") + '</a></div>' +
       '<p class="muted small">' + Site.t("price_note") + '</p></div></div>' +
       ((p.specs || []).length ? '<section class="specs"><h2>' + Site.t("specs") + '</h2><table>' + p.specs.map((s) => '<tr><th>' + Site.esc(Site.lang === "ar" ? s.k_ar : s.k_en) + '</th><td>' + Site.esc(Site.lang === "ar" ? s.v_ar : s.v_en) + '</td></tr>').join("") + attrs.map((a) => '<tr><th>' + Site.esc(Site.lang === "ar" ? a.row.attribute_ar : a.row.attribute_en) + '</th><td>' + a.options.map((o) => Site.esc(Site.lang === "ar" ? o.option_ar : o.option_en)).join(", ") + '</td></tr>').join("") + '</table></section>' : "") +
+      (window.guideBox ? window.guideBox(p.sector_code) : "") +
       (related.length ? '<section class="sec"><h2>' + Site.t("related") + '</h2><div class="pgrid">' + related.map((r) => Site.card(r, deps)).join("") + '</div></section>' : "");
     main.querySelectorAll("[data-o]").forEach((b) => b.onclick = () => { sel[b.dataset.a] = b.dataset.o; draw(); });
     main.querySelectorAll("[data-q]").forEach((b) => b.onclick = () => { qty = Math.max(1, qty + Number(b.dataset.q)); draw(); });

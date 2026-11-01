@@ -7,18 +7,20 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&family=IBM+Plex+Sans+Arabic:wght@400;500;700&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="styles.css?v=21" />
+<link rel="stylesheet" href="styles.css?v=23" />
 <link rel="icon" href="img/emblem-dark.png" />
-<script src="icons.js?v=21"></script>
-<script src="pages.js?v=21"></script>
-<script src="posts.js?v=21"></script>
-<script src="site.js?v=21"></script>
+<script src="icons.js?v=23"></script>
+<script src="pages.js?v=23"></script>
+<script src="posts.js?v=23"></script>
+<script src="guides.js?v=23"></script>
+<script src="site.js?v=23"></script>
 </head>
 <body>
 
 <main id="main" class="wrap cat-page">
   <div id="crumbs"></div>
   <div class="cat-head"><div><h1 id="title" data-t="all_products"></h1><p id="blurb" class="muted"></p></div></div>
+  <div id="gbox"></div>
   <div id="subcats"></div>
   <div class="cat-layout">
     <aside class="side" id="side" aria-label="Filters"></aside>
@@ -42,6 +44,7 @@ window.PAGE = async function () {
     document.getElementById("crumbs").innerHTML = Site.crumbs(cr);
     document.getElementById("title").textContent = cat ? Site.pick(cat, "name") : dep ? Site.pick(dep, "name") : st.q ? "\u201c" + st.q + "\u201d" : Site.t("all_products");
     document.getElementById("blurb").textContent = dep && !cat ? Site.pick(dep, "blurb") : "";
+    document.getElementById("gbox").innerHTML = dep && window.guideBox ? window.guideBox(dep.code) : "";
     document.title = document.getElementById("title").textContent + " | Palm General Supply";
     const sub = dep && !cat && !st.q ? (dep.categories || []) : (!dep && !st.q ? deps.map((d) => ({ dep: d })) : []);
     document.getElementById("subcats").innerHTML = sub.length ? '<div class="subtiles">' + sub.map((c) => c.dep ? '<a class="stile photo" href="catalog.html?d=' + c.dep.code + '">' + (Site.depPhoto(c.dep.code) ? '<span class="stile-img"><img src="' + Site.esc(Site.thumb(Site.depPhoto(c.dep.code))) + '" alt="" loading="lazy" /></span>' : icon(c.dep.icon, 40)) + '<span>' + Site.esc(Site.pick(c.dep, "name")) + '</span></a>' : '<a class="stile photo" href="catalog.html?d=' + dep.code + '&c=' + c.id + '">' + (Site.catPhoto(c.id) ? '<span class="stile-img"><img src="' + Site.esc(Site.thumb(Site.catPhoto(c.id))) + '" alt="" loading="lazy" /></span>' : icon(c.icon || dep.icon, 40)) + '<span>' + Site.esc(Site.pick(c, "name")) + '</span><small>' + Site.num(c.count) + '</small></a>').join("") + '</div>' : "";
