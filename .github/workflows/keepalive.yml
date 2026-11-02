@@ -1,0 +1,28 @@
+name: Keep database awake
+# Supabase free projects pause after about a week with no activity.
+# This pings the catalogue every 2 days so the website never shows an empty shop.
+on:
+  schedule:
+    - cron: "17 6 */2 * *"
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping the database
+        run: |
+          curl -fsS --retry 3 "https://gsgniarlokepcsagvvmq.supabase.co/rest/v1/public_departments?select=code&limit=1" \
+            -H "apikey: sb_publishable_bI8glK6s6T_UX5IWrvhJHQ_ThWSOp1j" \
+            -H "Authorization: Bearer sb_publishable_bI8glK6s6T_UX5IWrvhJHQ_ThWSOp1j"
+      - uses: actions/checkout@v4
+      - name: Stop GitHub switching this schedule off (it does after 60 quiet days)
+        run: |
+          last=$(git log -1 --format=%ct)
+          if [ $(( $(date +%s) - last )) -gt $(( 50 * 86400 )) ]; then
+            git config user.name "keepalive-bot"
+            git config user.email "keepalive-bot@users.noreply.github.com"
+            git commit --allow-empty -m "Keep schedule active"
+            git push
+          fi
