@@ -906,7 +906,7 @@ function parsePlan(s) {
 var TOKEN = Deno.env.get("TELEGRAM_BOT_TOKEN") ?? "";
 var AKEY = Deno.env.get("ANTHROPIC_API_KEY") ?? Deno.env.get("PGS outreach") ?? Deno.env.get("PGS_OUTREACH") ?? "";
 var GKEY = Deno.env.get("GEMINI_API_KEY") ?? "";
-var MODEL = Deno.env.get("TELEGRAM_CLAUDE_MODEL") ?? "claude-sonnet-5-5";
+var MODEL = Deno.env.get("TELEGRAM_CLAUDE_MODEL") ?? "claude-haiku-5-5";
 var PRICE = { "claude-sonnet-5-5": [2, 10], "claude-haiku-5-5": [0.1, 0.5], "claude-opus-5-5": [5, 25] };
 var isAr = (s) => /[؀-ۿ]/.test(s);
 var db = () => sb();
@@ -926,7 +926,7 @@ async function claude(messages) {
   const r = await fetch("https://api.anthropic.com/v1/messages", {
     method: "POST",
     headers: { "content-type": "application/json", "x-api-key": AKEY, "anthropic-version": "2023-06-01" },
-    body: JSON.stringify({ model: MODEL, max_tokens: 1500, system: [{ type: "text", text: sys, cache_control: { type: "ephemeral" } }], messages: msgs })
+    body: JSON.stringify({ model: MODEL, max_tokens: 1e3, system: [{ type: "text", text: sys, cache_control: { type: "ephemeral" } }], messages: msgs })
   });
   const j = await r.json().catch(() => ({}));
   if (!r.ok) throw new Error(r.status === 429 || r.status === 529 ? "Claude is busy, try again in a minute." : `Claude: ${j?.error?.message ?? r.statusText}`);
@@ -973,9 +973,16 @@ async function state(chat) {
 }
 var saveState = (chat, convo, pending) => db().from("telegram_state").upsert({ chat_id: chat, convo: convo.slice(-12), pending, updated_at: (/* @__PURE__ */ new Date()).toISOString() });
 async function turn(chat, text) {
-  await tg("sendChatAction", { chat_id: chat, action: "typing" });
-  const st = await state(chat);
-  const ctx = await loadContext();
+  tg("sendChatAction", { chat_id: chat, action: "typing" });
+  const typing = setInterval(() => tg("sendChatAction", { chat_id: chat, action: "typing" }), 4500);
+  try {
+    return await turnInner(chat, text);
+  } finally {
+    clearInterval(typing);
+  }
+}
+async function turnInner(chat, text) {
+  const [st, ctx] = await Promise.all([state(chat), loadContext()]);
   const sys = { role: "system", content: systemPrompt(ctx) + '\n\nYou are answering on Telegram, away from the PGS screen: there is no current screen, keep "say" short, plain text, no markdown.' };
   const history = (st.convo ?? []).filter((m) => m.role !== "system");
   const userMsg = { role: "user", content: text + (isAr(text) ? "\n(\u0631\u062F \u0641\u064A say \u0628\u0627\u0644\u0639\u0627\u0645\u064A\u0629 \u0627\u0644\u0645\u0635\u0631\u064A\u0629)" : "") };
